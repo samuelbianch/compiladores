@@ -7,7 +7,7 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
-Input = String
+Input = Stream
 Parser = LL
 #RegularDefinitions
 D: [0-9]
@@ -44,7 +44,7 @@ write = id:  "escreva"
 <STMT> ::= read "->" id;
 <STMT> ::= write "->" <MESSAGE>;
 <MESSAGE> ::= id | string;
-<EXPRESSION> ::= <RELATIONAL_OPERATOR> <SIMPLE_EXPRESSION>;
+<EXPRESSION> ::= <RELATIONAL_OPERATOR> | <SIMPLE_EXPRESSION>;
 <RELATIONAL_OPERATOR> ::= ">" | "<" | "=";
-<SIMPLE_EXPRESSION> ::= <ADDING_OPERATOR>;
+<SIMPLE_EXPRESSION> ::= id <RELATIONAL_OPERATOR> | <ADDING_OPERATOR> id;
 <ADDING_OPERATOR> ::= "+" | "-";
