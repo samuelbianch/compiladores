@@ -1,0 +1,93 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = Stream
+Parser = LL
+#RegularDefinitions
+D: [0-9]
+L: [a-z]
+WS: [\ \n\t]
+#Tokens
+: {WS}*
+";"
+"("
+")"
+"->"
+">"
+"<"
+"=="
+"{"
+"}"
+type: "int"
+id: {L} ({L} | {D})*
+string: \"{L}+\"
+number: {D}+
+atribute: "="
+mult: "*"
+div: "/"
+plus: "+"
+minus: "-"
+read = id: "leia"
+write = id: "escreva"
+if = id: "se"
+else = id: "senao"
+
+#NonTerminals
+<PROGRAM>
+<STMT_LIST>
+<STMT>
+<STRING>
+<DECLARATION>
+<GET>
+<EXPRESSION>
+<RELATIONAL_OPERATOR>
+<MESSAGE>
+<PLUS_MINUS>
+<TERM>
+<MULT_OPERATOR>
+<IF_ELSE>
+<IF>
+<ELSE>
+<FACTOR>
+<TERM_TAIL>
+<FACTOR_TAIL>
+<COMP>
+#Grammar
+<PROGRAM> ::= <STMT_LIST>;
+<STMT_LIST> ::= <STMT> ";" <STMT_LIST> | î;
+<STMT> ::= read "->" id;
+<STMT> ::= write "->" <MESSAGE>;
+<STMT> ::= <DECLARATION>;
+<STMT> ::= <IF>;
+<STMT> ::= <GET>;
+<MESSAGE> ::= id | string;
+
+
+<DECLARATION> ::= type <GET>;
+<GET> ::= id atribute <EXPRESSION>;
+
+
+<IF_ELSE> ::= î | <ELSE>;
+<IF> ::= if "(" <COMP> ")" "{" <STMT_LIST> "}" <IF_ELSE>;
+<ELSE> ::= else "{" <STMT_LIST> "}";
+
+
+<EXPRESSION> ::= <TERM> <TERM_TAIL> | number;
+<TERM_TAIL> ::= <PLUS_MINUS> <TERM> <TERM_TAIL> | î;
+<TERM> ::= <FACTOR> <FACTOR_TAIL>;
+<FACTOR_TAIL> ::= <MULT_OPERATOR> <FACTOR> <FACTOR_TAIL>;
+<FACTOR_TAIL> ::= î;
+<FACTOR> ::= "(" <EXPRESSION> ")";
+<FACTOR> ::= id;
+<FACTOR> ::= number;
+<PLUS_MINUS> ::= plus | minus;
+<RELATIONAL_OPERATOR> ::= ">" | "<" | "==";
+<MULT_OPERATOR> ::= mult | div;
+
+<COMP> ::= id <RELATIONAL_OPERATOR> id;
