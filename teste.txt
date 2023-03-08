@@ -1,0 +1,15 @@
+leia -> x;
+leia -> b;
+se (x > b) {
+	escreva -> x;
+} senao {
+	escreva -> b;
+};
+
+leia -> fatorial;
+cont = 1;
+
+enquanto (fatorial < cont){
+	resultado = resultado * cont;
+	cont = cont + 1;
+};
