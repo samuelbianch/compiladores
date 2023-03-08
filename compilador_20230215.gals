@@ -11,8 +11,9 @@ Input = Stream
 Parser = LL
 #RegularDefinitions
 D: [0-9]
-L: [a-z]
+L: [aA-zZ]
 WS: [\ \n\t]
+E: [\ ]
 #Tokens
 : {WS}*
 ";"
@@ -24,9 +25,11 @@ WS: [\ \n\t]
 "=="
 "{"
 "}"
+"'"
+"'"
 type: "int"
 id: {L} ({L} | {D})*
-string: \"{L}+\"
+aspas: \"
 number: {D}+
 atribute: "="
 mult: "*"
@@ -37,6 +40,7 @@ read = id: "leia"
 write = id: "escreva"
 if = id: "se"
 else = id: "senao"
+while = id: "enquanto"
 
 #NonTerminals
 <PROGRAM>
@@ -58,15 +62,19 @@ else = id: "senao"
 <TERM_TAIL>
 <FACTOR_TAIL>
 <COMP>
+<WHILE>
 #Grammar
 <PROGRAM> ::= <STMT_LIST>;
 <STMT_LIST> ::= <STMT> ";" <STMT_LIST> | î;
 <STMT> ::= read "->" id;
-<STMT> ::= write "->" <MESSAGE>;
+<STMT> ::= write "->" aspas <MESSAGE> aspas;
 <STMT> ::= <DECLARATION>;
 <STMT> ::= <IF>;
 <STMT> ::= <GET>;
-<MESSAGE> ::= id | string;
+<STMT> ::= <WHILE>;
+
+<STRING> ::= id <STRING> | î; 
+<MESSAGE> ::= aspas <STRING> aspas;
 
 
 <DECLARATION> ::= type <GET>;
@@ -78,7 +86,8 @@ else = id: "senao"
 <ELSE> ::= else "{" <STMT_LIST> "}";
 
 
-<EXPRESSION> ::= <TERM> <TERM_TAIL> | number;
+
+<EXPRESSION> ::= <TERM> <TERM_TAIL>;
 <TERM_TAIL> ::= <PLUS_MINUS> <TERM> <TERM_TAIL> | î;
 <TERM> ::= <FACTOR> <FACTOR_TAIL>;
 <FACTOR_TAIL> ::= <MULT_OPERATOR> <FACTOR> <FACTOR_TAIL>;
@@ -86,8 +95,12 @@ else = id: "senao"
 <FACTOR> ::= "(" <EXPRESSION> ")";
 <FACTOR> ::= id;
 <FACTOR> ::= number;
-<PLUS_MINUS> ::= plus | minus;
 <RELATIONAL_OPERATOR> ::= ">" | "<" | "==";
 <MULT_OPERATOR> ::= mult | div;
+<PLUS_MINUS> ::= plus | minus;
 
-<COMP> ::= id <RELATIONAL_OPERATOR> id;
+
+<COMP> ::= <EXPRESSION> <RELATIONAL_OPERATOR> <EXPRESSION>;
+
+
+<WHILE> ::= while "(" <COMP> ")" "{" <STMT_LIST> "}";
