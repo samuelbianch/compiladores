@@ -25,11 +25,10 @@ E: [\ ]
 "=="
 "{"
 "}"
-"'"
-"'"
 type: "int"
 id: {L} ({L} | {D})*
 aspas: \"
+string: {L}+ | {D} | {E}*
 number: {D}+
 atribute: "="
 mult: "*"
@@ -67,14 +66,14 @@ while = id: "enquanto"
 <PROGRAM> ::= <STMT_LIST>;
 <STMT_LIST> ::= <STMT> ";" <STMT_LIST> | î;
 <STMT> ::= read "->" id;
-<STMT> ::= write "->" aspas <MESSAGE> aspas;
+<STMT> ::= write "->" <MESSAGE>;
 <STMT> ::= <DECLARATION>;
 <STMT> ::= <IF>;
 <STMT> ::= <GET>;
 <STMT> ::= <WHILE>;
 
-<STRING> ::= id <STRING> | î; 
-<MESSAGE> ::= aspas <STRING> aspas;
+
+<MESSAGE> ::= aspas string aspas;
 
 
 <DECLARATION> ::= type <GET>;
