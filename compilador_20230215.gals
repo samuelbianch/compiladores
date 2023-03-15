@@ -13,7 +13,7 @@ Parser = LL
 D: [0-9]
 L: [aA-zZ]
 WS: [\ \n\t]
-E: [\ ]
+E: [\32]
 #Tokens
 : {WS}*
 ";"
@@ -25,11 +25,12 @@ E: [\ ]
 "=="
 "{"
 "}"
+"'"
+"'"
 type: "int"
-id: {L} ({L} | {D})*
-aspas: \"
-string: {L}+ | {D} | {E}*
 number: {D}+
+id: {L} ({L} | {D})*
+string: \"({L}+ | {D} | {E})\"
 atribute: "="
 mult: "*"
 div: "/"
@@ -46,7 +47,6 @@ while = id: "enquanto"
 <STMT_LIST>
 <STMT>
 <STRING>
-<DECLARATION>
 <GET>
 <EXPRESSION>
 <RELATIONAL_OPERATOR>
@@ -67,16 +67,14 @@ while = id: "enquanto"
 <STMT_LIST> ::= <STMT> ";" <STMT_LIST> | î;
 <STMT> ::= read "->" id;
 <STMT> ::= write "->" <MESSAGE>;
-<STMT> ::= <DECLARATION>;
 <STMT> ::= <IF>;
 <STMT> ::= <GET>;
 <STMT> ::= <WHILE>;
 
 
-<MESSAGE> ::= aspas string aspas;
+<MESSAGE> ::= id | string | î;
 
 
-<DECLARATION> ::= type <GET>;
 <GET> ::= id atribute <EXPRESSION>;
 
 

@@ -13,3 +13,5 @@ enquanto (fatorial < cont){
 	resultado = resultado * cont;
 	cont = cont + 1;
 };
+
+escreva -> "EscrevendoString";
