@@ -27,6 +27,8 @@ E: [\32]
 "}"
 "'"
 "'"
+"!="
+"\n"
 type: "int"
 number: {D}+
 id: {L} ({L} | {D})*
@@ -72,7 +74,7 @@ while = id: "enquanto"
 <STMT> ::= <WHILE>;
 
 
-<MESSAGE> ::= id | string | î;
+<MESSAGE> ::= id | string | î | "\n";
 
 
 <GET> ::= id atribute <EXPRESSION>;
@@ -92,7 +94,7 @@ while = id: "enquanto"
 <FACTOR> ::= "(" <EXPRESSION> ")";
 <FACTOR> ::= id;
 <FACTOR> ::= number;
-<RELATIONAL_OPERATOR> ::= ">" | "<" | "==";
+<RELATIONAL_OPERATOR> ::= ">" | "<" | "==" | "!=";
 <MULT_OPERATOR> ::= mult | div;
 <PLUS_MINUS> ::= plus | minus;
 
