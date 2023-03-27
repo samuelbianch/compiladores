@@ -1,0 +1,16 @@
+leia -> n;
+
+se (n > 1) {
+    x = 1;
+    i = 1;
+    enquanto (x < n+1) {
+        enquanto (i < x+1) {
+            escreva -> i;
+            i = i + 1;
+        };
+        i = 1;
+        x = x + 1;
+    };
+} senao {
+    escreva -> "erro";
+}

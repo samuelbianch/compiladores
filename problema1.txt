@@ -1,0 +1,23 @@
+leia -> a;
+leia -> b;
+leia -> c;
+
+se (a == b) {
+    se (b == c) {
+        escreva -> "Equilatero";
+    };
+}; se (a == b) {
+    se (b != c) {
+        escreva -> "Isoceles";
+    };
+}; se (b == c) {
+    se (b != a) {
+        escreva -> "Isoceles";
+    };
+}; se (a != b) {
+    se (a != c) {
+        escreva -> "Escaleno";
+    };
+} senao {
+    escreva -> "ERRO";
+};
