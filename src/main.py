@@ -4,17 +4,11 @@ from lexico import AnalisadorLexico
 
 print(sys.argv[0])
 
-lista_caracteres = ''
-
-with open("../teste.txt", "r") as arquivo:
-    lista_caracteres += arquivo.read()
-
-print(lista_caracteres)
-cont = 0
-
-analisador = AnalisadorLexico()
-for i in lista_caracteres:
-    if analisador.is_limiter(i):
-        cont += 1
-
-    print (cont)
+try:
+    with open(sys.argv[1], "r") as arquivo:
+        print("Arquivo lido")
+        analisador = AnalisadorLexico()
+        analisador.analisa(arquivo)
+except Exception as exception:
+    print("Excecao ao ler arquivo", exception)
+    raise 
