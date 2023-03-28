@@ -164,10 +164,10 @@ class AnalisadorLexico():
                         if (i+1 < tam_linha):
                             caracter_seguinte = linha[i+1]
 
-                        if (self.is_letra(caracter_atual) or self.is_numero(caracter_atual)):
+                        if (self.is_letra(caracter_atual) or self.is_numero(caracter_atual) or caracter_atual == '_' or caracter_atual == '-'):
                             temp += caracter_atual
 
-                        if (self.is_limiter(caracter_atual) or caracter_atual == '\n'):
+                        elif (self.is_limiter(caracter_atual) or caracter_atual == '\n'):
                             i -= 1
                             break
 
