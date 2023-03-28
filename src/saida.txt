@@ -1,5 +1,22 @@
-tok10_;tok10_;token102_se->se (x > b) {
-
-tok11_(tok12_)tok13_{tok10_;tok14_}token102_se->} senao {
-
-tok13_{tok10_;tok14_}tok10_;tok10_;tok10_;tok11_(tok12_)tok13_{tok10_;tok10_;tok14_}tok10_;tok10_;
+tok10_;->1
+tok10_;->2
+tok102_se->3
+tok12_)->3
+tok13_{->3
+tok10_;->4
+tok14_}->5
+tok103_senao->5
+tok13_{->5
+tok10_;->6
+tok14_}->7
+tok10_;->7
+tok10_;->9
+tok10_;->10
+tok104_enquanto->12
+tok12_)->12
+tok13_{->12
+tok10_;->13
+tok10_;->14
+tok14_}->15
+tok10_;->15
+tok10_;->17

@@ -13,6 +13,8 @@ Tokens 0-99:
 8 - {
 9 - }
 10 - '
+11 - !=
+12 - \n
 
 
 Tokens 100-199:
@@ -35,6 +37,11 @@ Tokens 200-299:
 207 - 7
 208 - 8
 209 - 9
+
+
+Tokens 300-399
+300 -  
+
 
 '''
 
@@ -92,6 +99,13 @@ class AnalisadorLexico():
             position
 
         return "token20" + str(position)
+    
+    def is_seta(self, entrada):
+        if entrada[0] == '-' and entrada[1] == '>':
+            return True
+        
+        return False
+    
     def is_palavra_reservada(self, entrada):
         """Verifica se o conjunto de caractere é uma palavra reservada"""
         if entrada in PALAVRA_RESERVADA:
@@ -101,7 +115,6 @@ class AnalisadorLexico():
 
     def qual_palavra_reservada(self, entrada):
         """Devolve qual o token da palavra reservada"""
-
         position = 0
         for c in PALAVRA_RESERVADA:
             if c == entrada:
@@ -109,7 +122,7 @@ class AnalisadorLexico():
 
             position += 1
 
-        return "token10"+str(position)
+        return "tok10"+str(position)
     
 
     def analisa(self, arquivo):
@@ -136,20 +149,43 @@ class AnalisadorLexico():
                 if ((i+1) < tam_linha):
                     caracter_seguinte = linha[i+1]
 
+                # Verificando se é um caractere limitador -> ;(){}
                 if (self.is_limiter(caracter_atual)):
-                    arquivo_saida.write(self.token_limitador(caracter_atual)+'_'+caracter_atual)
+                    arquivo_saida.write(self.token_limitador(caracter_atual)+'_'+caracter_atual + '->' + str(linha_atual) + '\n')
 
-                elif caracter_seguinte != None and self.is_palavra_reservada(caracter_atual + caracter_seguinte):
-                    arquivo_saida.write(self.qual_palavra_reservada(caracter_atual + caracter_seguinte) + '_' + caracter_atual + caracter_seguinte + '->' + str(linha) + '\n')
+                # Verificando qual é a palavra reservada
+                elif (self.is_letra(caracter_atual)):
+                    temp = caracter_atual
                     i += 1
-                    
+                    while i < tam_linha:
+                        caracter_seguinte = None
+                        caracter_atual = linha[i]
+
+                        if (i+1 < tam_linha):
+                            caracter_seguinte = linha[i+1]
+
+                        if (self.is_letra(caracter_atual) or self.is_numero(caracter_atual)):
+                            temp += caracter_atual
+
+                        if (self.is_limiter(caracter_atual) or caracter_atual == '\n'):
+                            i -= 1
+                            break
+
+                        i += 1
+
+                    if (self.is_palavra_reservada(temp)):
+                        arquivo_saida.write(self.qual_palavra_reservada(temp) + '_' + temp + '->' + str(linha_atual) + '\n')
+                        i = linha_atual
+
+                # Verificando se é um numero   
                 elif caracter_seguinte != None and self.is_numero(caracter_atual):
                     temp = caracter_atual
                     while (self.is_numero(caracter_atual) and (i+1 < tam_linha)):
                         temp += caracter_atual
                         i += 1
                         caracter_atual = linha[i]
-                    arquivo_saida.write(self.qual_numero(caracter_atual + caracter_seguinte) + '_' + temp + '->' + str(linha) + '\n')
+                    arquivo_saida.write(self.qual_numero(caracter_atual + caracter_seguinte) + '_' + temp + '->' + str(linha_atual) + '\n')
+
 
                 
                 i += 1 # Incrementando a leitura dos caracteres da linha lida no momento
