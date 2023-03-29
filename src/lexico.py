@@ -163,12 +163,15 @@ class AnalisadorLexico():
         
         return False
     
+    def get_lista_de_tokens(token):
+        return lista_
 
     def analisa(self, arquivo):
+        lista_tokens = []
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
         # Cria o arquivo de saída
-        arquivo_saida = open('saida.txt', 'w')
+        arquivo_saida = open('saida_lexico.txt', 'w')
 
         # Lendo a linha da entrada
         linha = arquivo.readline()
@@ -190,29 +193,35 @@ class AnalisadorLexico():
 
                 # Verificando se é um caractere limitador: ;(){}
                 if self.is_limiter(caracter_atual):
+                    lista_tokens.append(caracter_atual)
                     arquivo_saida.write(self.token_limitador(caracter_atual)+','+caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
 
                 # Verificando se é operador matematico
                 if i - 1 != -1:
                     if self.is_math(linha[i-1], caracter_atual, caracter_seguinte):
                         if caracter_seguinte == '=':
+                            lista_tokens.append(caracter_atual + caracter_seguinte)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + str(i+1) + '\n')
                         else:
+                            lista_tokens.append(caracter_atual)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
                 
                 # Verificando se é a seta do leia e escreva
                 if self.is_seta(str(caracter_atual) + str(caracter_seguinte)):
+                    lista_tokens.append(caracter_atual+caracter_seguinte)
                     arquivo_saida.write("tok11" + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
                 # Verificando caracter de alocação em memória
                 if i - 1 != -1:
                     if self.is_recebe(linha[i-1], caracter_atual):
+                        lista_tokens.append(caracter_atual)
                         arquivo_saida.write("tok12" + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
 
                 # TODO
                 # Verificando se é um numero   
                 if caracter_seguinte != None and self.is_numero(caracter_atual):
+                    lista_tokens.append(caracter_atual)
                     arquivo_saida.write(self.qual_numero(caracter_atual) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
 
@@ -242,8 +251,10 @@ class AnalisadorLexico():
                         # print(temp)
                         # print(linha_atual)
                         # print(self.qual_palavra_reservada(temp))
+                        lista_tokens.append(temp)
                         arquivo_saida.write(self.qual_palavra_reservada(temp) + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
                     else:
+                        lista_tokens.append('id')
                         arquivo_saida.write("tok400" + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
 
                 i += 1 # Incrementando a leitura dos caracteres da linha lida no momento
