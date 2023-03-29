@@ -6,7 +6,7 @@ fatorial_n = 1
 fatorial_p = 1
 fatorial_x = 1
 
-if linhas_total >= 1:
+if linhas_total > 0:
     while (linha_atual < linhas_total):
         coluna_atual = 0     
         fatorial_n = 1
