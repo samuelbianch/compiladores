@@ -51,11 +51,11 @@ class AnalisadorSintatico:
         self.pilha_comandos.append(elemento)
 
     def desempilha(self):
-        self.pilha_comandos.pop()
+        if len(self.pilha_comandos) > 0:
+            self.pilha_comandos.pop()
 
     def procedimento(self, opcao):
         if opcao == 0:
-            self.desempilha()
             self.empilha('<STMT_LIST>')
         
         elif opcao == 1:
@@ -225,7 +225,7 @@ class AnalisadorSintatico:
             self.empilha('enquanto')
 
     def peek(self):
-        return self.pilha_comandos[0]
+        return self.pilha_comandos[len(self.pilha_comandos)-1]
 
 
     def analisa(self):
@@ -233,27 +233,27 @@ class AnalisadorSintatico:
         print(self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
+
+        print("Topo da pilha: " + self.peek())
         while i < tamanho:
             # self.pilha_comandos.pop()
             saida = open('saida_sintatico.txt', 'w')
 
             #print("Ultimo elemento: " + str(self.pilha_lexico[0]))
             saida.write(str(self.pilha_comandos))
-
+            print("ENTREI AQUI")
             if self.peek() == self.lista_tokens[0]:
                 self.desempilha()
                 del self.lista_tokens[0]
-                return "Tudo ok!"
             
             # Caso o topo da pilha for <PROGRAM>
             elif self.peek() == '<PROGRAM>':
                 if self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
                     self.procedimento(0)
                     print('encontrei: ' + self.lista_tokens[0])
-                    break
-            
+
             # Caso o topo da pilha seja <STMT_LIST>
-            elif self.peek() == '<STMT_LIST':
+            elif self.peek() == '<STMT_LIST>':
                 if self.lista_tokens[0] == '$' or '}':
                     self.procedimento(2)
 
@@ -266,7 +266,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == 'id':
                     self.procedimento(6)
 
-                elif self.lista_tokens[0] == 'read':
+                elif self.lista_tokens[0] == 'leia':
                     self.procedimento(3)
 
                 elif self.lista_tokens[0] == 'escreva':
@@ -289,14 +289,116 @@ class AnalisadorSintatico:
                     self.procedimento(17)
 
             # Caso topo da pilha seja <RELATIONAL_OPERATOR>
+            elif self.peek() == '<RELATIONAL_OPERATOR>':
+                if self.lista_tokens[0] == '>':
+                    self.procedimento(26)
 
+                if self.lista_tokens[0] == '<':
+                    self.procedimento(27)
+
+                
+                if self.lista_tokens[0] == '==':
+                    self.procedimento(28)
+
+                if self.lista_tokens[0] == '!=':
+                    self.procedimento(29)
+
+            # Caso topo da pilha seja <MESSAGE>
+            elif self.peek() == '<MESSAGE>':
+                if self.lista_tokens[0] == ';':
+                    self.procedimento(10)
+
+                if self.lista_tokens[0] == '\n':
+                    self.procedimento(11)
+
+                if self.lista_tokens[0] == 'id':
+                    self.procedimento(8)
+
+                if self.lista_tokens[0] == 'string':
+                    self.procedimento(9)
+
+            # Caso topo da pilha seja <PLUS_MINUS>
+            elif self.peek() == '<PLUS_MINUS>':
+                if self.lista_tokens[0] == '+':
+                    self.procedimento(32)
+
+                if self.lista_tokens[0] == '-':
+                    self.procedimento(33)
+
+            # Caso topo da pilha seja <TERM>
+            elif self.peek() == '<TERM>':
+                if self.lista_tokens == '(' or 'number' or 'id':
+                    self.procedimento(20)
+
+            # Caso topo da pilha seja <MULT_OPERATOR>
+            elif self.peek() == '<MULT_OPERATOR>':
+                if self.lista_tokens[0] == '*':
+                    self.procedimento(30)
+
+                if self.lista_tokens[0] == '/':
+                    self.procedimento(31)
+
+
+            # Caso topo da pilha seja <IF_ELSE>
+            elif self.peek() == '<IF_ELSE>':
+                if self.lista_tokens[0] == ';':
+                    self.procedimento(13)
+
+                if self.lista_tokens[0] == 'senao':
+                    self.procedimento(14)
+
+            # Caso topo da pilha seja <IF>
+            elif self.peek() == '<IF>':
+                if self.lista_tokens[0] == 'se':
+                    self.procedimento(15)
+            
+            # Caso topo da pilha seja <ELSE>
+            elif self.peek() == '<ELSE':           
+                if self.lista_tokens[0] == 'senao':
+                    self.procedimento(16)
+
+            # Caso topo da pilha seja <FACTOR>
+            elif self.peek() == '<FACTOR>':
+                if self.lista_tokens[0] == '(':
+                    self.procedimento(23)
+
+                if self.lista_tokens[0] == 'number':
+                    self.procedimento(25)
+
+                if self.lista_tokens[0] == 'id':
+                    self.procedimento(24)
+
+            # Caso topo da pilha seja <TERM_TAIL>
+            elif self.peek() == '<TERM_TAIL>':
+                if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '==' or '!=':
+                    self.procedimento(19)
+
+                if self.lista_tokens[0] == '+' or '-':
+                    self.procedimento(18)
+
+             # Caso topo da pilha seja <FACTOR_TAIL>
+            elif self.peek() == '<FACTOR_TAIL>':
+                if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '!=' or '+' or '-':
+                    self.procedimento(22)
+
+                if self.lista_tokens[0] == '*' or '/':
+                    self.procedimento(21)
+
+            # Caso topo da pilha seja <COMP>
+            elif self.peek() == '<COMP>':
+                if self.lista_tokens[0] == '(' or 'number' or 'id':
+                    self.procedimento(34)
+            
+            # Caso topo da pilha seja <WHILE>
+            elif self.peek() == '<WHILE>':
+                if self.lista_tokens[0] == 'enquanto':
+                    self.procedimento(35)
 
             i += 1
-            # print(self.pilha_comandos)
 
-        # print(self.lista_tokens)
-        # print(self.pilha_comandos)
-            
+
+            print("Laço: "+ str(i) + "Pilha: " + str(self.pilha_comandos))
+            print("Laço: " + str(i) + "Lista: " + str(self.lista_tokens))
 
 
 # print(arquivo.readline())
