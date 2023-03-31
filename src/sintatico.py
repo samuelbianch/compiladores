@@ -244,18 +244,52 @@ class AnalisadorSintatico:
                 self.desempilha()
                 del self.lista_tokens[0]
                 return "Tudo ok!"
-            elif self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
-                self.procedimento(0)
-                print('encontrei: ' + self.lista_tokens[0])
-                break
-            elif self.peek() == '$' or '}':
-                self.procedimento(2)
+            
+            # Caso o topo da pilha for <PROGRAM>
+            elif self.peek() == '<PROGRAM>':
+                if self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
+                    self.procedimento(0)
+                    print('encontrei: ' + self.lista_tokens[0])
+                    break
+            
+            # Caso o topo da pilha seja <STMT_LIST>
+            elif self.peek() == '<STMT_LIST':
+                if self.lista_tokens[0] == '$' or '}':
+                    self.procedimento(2)
 
-            elif self.peek() == 'id' or 'leia' or 'escreva' or 'se' or 'senao' or 'enquanto':
-                self.procedimento(1)
+                if self.lista_tokens[0] == 'id' or 'leia' or 'escreva' or 'se' or 'senao' or 'enquanto':
+                    self.procedimento(1)
 
-            elif self.peek() == 'id':
-                self.procedimento(6)
+            
+            # Caso o topo da pilha seja <STMT>
+            elif self.peek() == '<STMT>':
+                if self.lista_tokens[0] == 'id':
+                    self.procedimento(6)
+
+                elif self.lista_tokens[0] == 'read':
+                    self.procedimento(3)
+
+                elif self.lista_tokens[0] == 'escreva':
+                    self.procedimento(4)
+                
+                elif self.lista_tokens[0] == 'se':
+                    self.procedimento(5)
+
+                elif self.lista_tokens[0] == 'enquanto':
+                    self.procedimento(7)
+
+            # Caso topo da pilha seja <GET>
+            elif self.peek() == '<GET>':
+                if self.lista_tokens[0] == 'id':
+                    self.procedimento(12)
+
+            # Caso topo da pilha seja <EXPRESSION>
+            elif self.peek() == '<EXPRESSION>':
+                if self.lista_tokens[0] == '(' or 'number' or 'id':
+                    self.procedimento(17)
+
+            # Caso topo da pilha seja <RELATIONAL_OPERATOR>
+
 
             i += 1
             # print(self.pilha_comandos)
