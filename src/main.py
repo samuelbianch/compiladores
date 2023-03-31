@@ -9,8 +9,8 @@ try:
         analisador_lexico = AnalisadorLexico()
         analisador_lexico.analisa(arquivo)
         arquivo.close()
-        analisador_sintatico = AnalisadorSintatico()
-        analisador_sintatico.analisa(analisador_lexico.get_lista_de_tokens)
+        analisador_sintatico = AnalisadorSintatico(analisador_lexico.get_lista_de_tokens())
+        analisador_sintatico.analisa()
 except Exception as exception:
     print("Excecao ao ler arquivo", exception)
     raise 

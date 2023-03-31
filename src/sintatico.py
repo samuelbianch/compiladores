@@ -40,23 +40,79 @@ import string
 from typing import List
 
 class AnalisadorSintatico():
-    nome = "Analisador Sintatico"
 
-    def analisa(self, lista_tokens):
+    def __init__(self, lista_tokens):
+        self.pilha_lexico = lista_tokens
+
+    pilha_comandos: List[str] = []
+    pilha_comandos.append('$')
+    pilha_comandos.append('PROGRAM')
+    pilha_comandos.append('STMT_LIST')
+    pilha_lexico: List[str] = []
+    
+
+    def empilha(self, elemento):
+        self.pilha_comandos.append(elemento)
+
+    def desempilha(self):
+        self.pilha_comandos.pop()
+
+    def procedimento(self, opcao):
+        if opcao == 0:
+            self.desempilha()
+            self.empilha('STMT_LIST')
+        
+        if opcao == 1:
+            self.desempilha()
+            self.empilha('STMT_LIST')
+            self.empilha(';')
+            self.empilha('STMT')
+
+        if opcao == 2:
+            self.desempilha()
+
+        if opcao == 3:
+            self.desempilha()
+            self.empilha('id')
+            self.empilha('->')
+            self.empilha('leia')
+
+        if opcao == 4:
+            self.desempilha()
+            self.empilha('<MESSAGE>')
+            self.empilha('->')
+            self.empilha('escreva')
+        
+        if opcao == 5:
+            self.desempilha()
+            self.empilha('<IF>')
+
+        if opcao == 7:
+            self.desempilha()
+            self.empilha('<WHILE>')
+        
+        if opcao == 8:
+            self.desempilha()
+            self.empilha('id')
+
+
+
+
+    def analisa(self):
         """Analisador Sintatico"""
-        pilha_comandos: List[str] = []
-        pilha_lexico: List[str] = []
-        
-        pilha_comandos.append('$')
-        pilha_comandos.append('PROGRAM')
-        pilha_comandos.append('STMT_LIST')
 
-        #with open("..\teste.txt", 'r') as arquivo:
-        
-        #pilha_lexico.append()
+        while self.pilha_comandos and self.pilha_lexico:
+            self.casos(self.pilha_lexico(0))
 
-        print(lista_tokens)
-        pilha_comandos.pop()
+        print(self.pilha_lexico)
+        self.pilha_comandos.pop()
         saida = open('saida_sintatico.txt', 'w')
-        saida.write(str(pilha_comandos))
-        # print(arquivo.readline())
+
+        print("Ultimo elemento: " + str(self.pilha_lexico[0]))
+        saida.write(str(self.pilha_comandos))
+
+        if 'Program':
+            if '$' or 'id' or 'read' or 'write' or 'if' or 'while':
+                self.procedimento(0)
+
+# print(arquivo.readline())
