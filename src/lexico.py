@@ -60,6 +60,7 @@ class AnalisadorLexico():
     """Classe que analisa o texto de entrada e separa os tokens da linguagem implementada"""
 
     lista_tokens = []
+    
     def __str__(self):
         return self.name
 
@@ -262,3 +263,5 @@ class AnalisadorLexico():
 
             linha = arquivo.readline() # Le a proxima linha
             linha_atual += 1
+
+        self.lista_tokens.append('$')
