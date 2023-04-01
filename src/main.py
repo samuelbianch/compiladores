@@ -4,7 +4,7 @@ from lexico import AnalisadorLexico
 from sintatico import AnalisadorSintatico
 
 try:
-    with open(sys.argv[1], "r") as arquivo:
+    with open('D:\\Programação\\compiladores\\algoritmo_de_teste.txt', "r") as arquivo:
         print("Arquivo lido")
         analisador_lexico = AnalisadorLexico()
         analisador_lexico.analisa(arquivo)

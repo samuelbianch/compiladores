@@ -56,6 +56,7 @@ class AnalisadorSintatico:
 
     def procedimento(self, opcao):
         if opcao == 0:
+            self.desempilha()
             self.empilha('<STMT_LIST>')
         
         elif opcao == 1:
@@ -151,7 +152,7 @@ class AnalisadorSintatico:
             self.desempilha()
             self.empilha('<FACTOR_TAIL>')
             self.empilha('<FACTOR>')
-
+            
         elif opcao == 21:
             self.desempilha()
             self.empilha('<FACTOR_TAIL>')
@@ -241,7 +242,7 @@ class AnalisadorSintatico:
 
             #print("Ultimo elemento: " + str(self.pilha_lexico[0]))
             saida.write(str(self.pilha_comandos))
-            print("ENTREI AQUI")
+            #print("ENTREI AQUI")
             if self.peek() == self.lista_tokens[0]:
                 self.desempilha()
                 del self.lista_tokens[0]
@@ -250,13 +251,12 @@ class AnalisadorSintatico:
             elif self.peek() == '<PROGRAM>':
                 if self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
                     self.procedimento(0)
-                    print('encontrei: ' + self.lista_tokens[0])
 
             # Caso o topo da pilha seja <STMT_LIST>
             elif self.peek() == '<STMT_LIST>':
+                print(self.lista_tokens[0])
                 if self.lista_tokens[0] == '$' or '}':
                     self.procedimento(2)
-
                 if self.lista_tokens[0] == 'id' or 'leia' or 'escreva' or 'se' or 'senao' or 'enquanto':
                     self.procedimento(1)
 
@@ -293,14 +293,14 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == '>':
                     self.procedimento(26)
 
-                if self.lista_tokens[0] == '<':
+                elif self.lista_tokens[0] == '<':
                     self.procedimento(27)
 
                 
-                if self.lista_tokens[0] == '==':
+                elif self.lista_tokens[0] == '==':
                     self.procedimento(28)
 
-                if self.lista_tokens[0] == '!=':
+                elif self.lista_tokens[0] == '!=':
                     self.procedimento(29)
 
             # Caso topo da pilha seja <MESSAGE>
@@ -308,13 +308,13 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == ';':
                     self.procedimento(10)
 
-                if self.lista_tokens[0] == '\n':
+                elif self.lista_tokens[0] == '\n':
                     self.procedimento(11)
 
-                if self.lista_tokens[0] == 'id':
+                elif self.lista_tokens[0] == 'id':
                     self.procedimento(8)
 
-                if self.lista_tokens[0] == 'string':
+                elif self.lista_tokens[0] == 'string':
                     self.procedimento(9)
 
             # Caso topo da pilha seja <PLUS_MINUS>
@@ -322,7 +322,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == '+':
                     self.procedimento(32)
 
-                if self.lista_tokens[0] == '-':
+                elif self.lista_tokens[0] == '-':
                     self.procedimento(33)
 
             # Caso topo da pilha seja <TERM>
@@ -335,7 +335,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == '*':
                     self.procedimento(30)
 
-                if self.lista_tokens[0] == '/':
+                elif self.lista_tokens[0] == '/':
                     self.procedimento(31)
 
 
@@ -344,7 +344,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == ';':
                     self.procedimento(13)
 
-                if self.lista_tokens[0] == 'senao':
+                elif self.lista_tokens[0] == 'senao':
                     self.procedimento(14)
 
             # Caso topo da pilha seja <IF>
@@ -353,7 +353,7 @@ class AnalisadorSintatico:
                     self.procedimento(15)
             
             # Caso topo da pilha seja <ELSE>
-            elif self.peek() == '<ELSE':           
+            elif self.peek() == '<ELSE>':           
                 if self.lista_tokens[0] == 'senao':
                     self.procedimento(16)
 
@@ -362,10 +362,10 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == '(':
                     self.procedimento(23)
 
-                if self.lista_tokens[0] == 'number':
+                elif self.lista_tokens[0] == 'number':
                     self.procedimento(25)
 
-                if self.lista_tokens[0] == 'id':
+                elif self.lista_tokens[0] == 'id':
                     self.procedimento(24)
 
             # Caso topo da pilha seja <TERM_TAIL>
@@ -373,7 +373,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '==' or '!=':
                     self.procedimento(19)
 
-                if self.lista_tokens[0] == '+' or '-':
+                elif self.lista_tokens[0] == '+' or '-':
                     self.procedimento(18)
 
              # Caso topo da pilha seja <FACTOR_TAIL>
@@ -381,7 +381,7 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '!=' or '+' or '-':
                     self.procedimento(22)
 
-                if self.lista_tokens[0] == '*' or '/':
+                elif self.lista_tokens[0] == '*' or '/':
                     self.procedimento(21)
 
             # Caso topo da pilha seja <COMP>
@@ -397,8 +397,8 @@ class AnalisadorSintatico:
             i += 1
 
 
-            print("Laço: "+ str(i) + "Pilha: " + str(self.pilha_comandos))
-            print("Laço: " + str(i) + "Lista: " + str(self.lista_tokens))
+            print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
+            print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens))
 
 
 # print(arquivo.readline())
