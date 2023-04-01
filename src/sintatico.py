@@ -36,7 +36,6 @@
 34 - 	<COMP> ::= <EXPRESSION> <RELATIONAL_OPERATOR> <EXPRESSION>
 35 - 	<WHILE> ::= while "(" <COMP> ")" "{" <STMT_LIST> "}"
 '''
-import string
 from typing import List
 
 class AnalisadorSintatico:
@@ -231,11 +230,11 @@ class AnalisadorSintatico:
 
     def analisa(self):
         """Analisador Sintatico"""
-        print(self.lista_tokens)
+        #print(self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
 
-        print("Topo da pilha: " + self.peek())
+        #print("Topo da pilha: " + self.peek())
         while i < tamanho:
             # self.pilha_comandos.pop()
             saida = open('saida_sintatico.txt', 'w')
@@ -246,7 +245,7 @@ class AnalisadorSintatico:
             if self.peek() == self.lista_tokens[0]:
                 self.desempilha()
                 del self.lista_tokens[0]
-            
+
             # Caso o topo da pilha for <PROGRAM>
             elif self.peek() == '<PROGRAM>':
                 if self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
@@ -266,16 +265,16 @@ class AnalisadorSintatico:
                 if self.lista_tokens[0] == 'id':
                     self.procedimento(6)
 
-                elif self.lista_tokens[0] == 'leia':
+                if self.lista_tokens[0] == 'leia':
                     self.procedimento(3)
 
-                elif self.lista_tokens[0] == 'escreva':
+                if self.lista_tokens[0] == 'escreva':
                     self.procedimento(4)
                 
-                elif self.lista_tokens[0] == 'se':
+                if self.lista_tokens[0] == 'se':
                     self.procedimento(5)
 
-                elif self.lista_tokens[0] == 'enquanto':
+                if self.lista_tokens[0] == 'enquanto':
                     self.procedimento(7)
 
             # Caso topo da pilha seja <GET>
