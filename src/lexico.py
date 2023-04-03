@@ -201,9 +201,21 @@ class AnalisadorLexico():
                 # Verificando se é operador matematico
                 if i - 1 != -1:
                     if self.is_math(linha[i-1], caracter_atual, caracter_seguinte):
-                        if caracter_seguinte == '=':
-                            self.lista_tokens.append(caracter_atual + caracter_seguinte)
-                            arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + str(i+1) + '\n')
+                        # if caracter_seguinte == '=':
+                            # self.lista_tokens.append(caracter_atual + caracter_seguinte)
+                            # arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + str(i+1) + '\n')
+                        if caracter_atual + caracter_seguinte == '==':
+                            self.lista_tokens.append(caracter_atual+caracter_seguinte)
+                            arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
+                            i = i + 2
+                            continue
+
+                        elif caracter_atual + caracter_seguinte == '!=':
+                            self.lista_tokens.append(caracter_atual+caracter_seguinte)
+                            arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
+                            i = i + 2
+                            continue
+
                         else:
                             self.lista_tokens.append(caracter_atual)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
@@ -223,7 +235,7 @@ class AnalisadorLexico():
                 # TODO
                 # Verificando se é um numero   
                 if caracter_seguinte != None and self.is_numero(caracter_atual):
-                    self.lista_tokens.append(caracter_atual)
+                    self.lista_tokens.append('number')
                     arquivo_saida.write(self.qual_numero(caracter_atual) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
 
@@ -262,6 +274,5 @@ class AnalisadorLexico():
                 i += 1 # Incrementando a leitura dos caracteres da linha lida no momento
 
             linha = arquivo.readline() # Le a proxima linha
-            linha_atual += 1
 
         self.lista_tokens.append('$')

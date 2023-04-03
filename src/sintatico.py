@@ -83,6 +83,10 @@ class AnalisadorSintatico:
             self.desempilha()
             self.empilha('<IF>')
 
+        elif opcao == 6:
+            self.desempilha()
+            self.empilha('<GET>')
+
         elif opcao == 7:
             self.desempilha()
             self.empilha('<WHILE>')
@@ -235,7 +239,7 @@ class AnalisadorSintatico:
         i = 1
 
         #print("Topo da pilha: " + self.peek())
-        while i < tamanho:
+        while len(self.lista_tokens) > 0:
             # self.pilha_comandos.pop()
             saida = open('saida_sintatico.txt', 'w')
 
@@ -248,15 +252,20 @@ class AnalisadorSintatico:
 
             # Caso o topo da pilha for <PROGRAM>
             elif self.peek() == '<PROGRAM>':
-                if self.lista_tokens[0] == '$' or 'id' or 'leia' or 'escreva' or 'se' or 'enquanto':
+                lista_temp = ['$', 'id', 'leia', 'escreva', 'se', 'enquanto']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(0)
 
             # Caso o topo da pilha seja <STMT_LIST>
             elif self.peek() == '<STMT_LIST>':
                 print(self.lista_tokens[0])
-                if self.lista_tokens[0] == '$' or '}':
+                lista_temp = ['$', '}']
+                lista_temp2 = ['id', 'leia', 'escreva', 'se', 'enquanto']
+
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(2)
-                if self.lista_tokens[0] == 'id' or 'leia' or 'escreva' or 'se' or 'senao' or 'enquanto':
+
+                elif self.lista_tokens[0] in lista_temp2:
                     self.procedimento(1)
 
             
@@ -284,7 +293,8 @@ class AnalisadorSintatico:
 
             # Caso topo da pilha seja <EXPRESSION>
             elif self.peek() == '<EXPRESSION>':
-                if self.lista_tokens[0] == '(' or 'number' or 'id':
+                lista_temp = ['(', 'number', 'id']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(17)
 
             # Caso topo da pilha seja <RELATIONAL_OPERATOR>
@@ -326,7 +336,8 @@ class AnalisadorSintatico:
 
             # Caso topo da pilha seja <TERM>
             elif self.peek() == '<TERM>':
-                if self.lista_tokens == '(' or 'number' or 'id':
+                lista_temp = ['(', 'id', 'number']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(20)
 
             # Caso topo da pilha seja <MULT_OPERATOR>
@@ -369,23 +380,28 @@ class AnalisadorSintatico:
 
             # Caso topo da pilha seja <TERM_TAIL>
             elif self.peek() == '<TERM_TAIL>':
-                if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '==' or '!=':
+                lista_temp = [';', ')', '>', '<', '==', '!=']
+                lista_temp2 = ['+', '-']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(19)
 
-                elif self.lista_tokens[0] == '+' or '-':
+                elif self.lista_tokens[0] in lista_temp2:
                     self.procedimento(18)
 
              # Caso topo da pilha seja <FACTOR_TAIL>
             elif self.peek() == '<FACTOR_TAIL>':
-                if self.lista_tokens[0] == ';' or ')' or '>' or '<' or '!=' or '+' or '-':
+                lista_temp = [';', ')', '>', '<', '!=', '+', '-', '==']
+                lista_temp2 = ['*', '/']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(22)
 
-                elif self.lista_tokens[0] == '*' or '/':
+                elif self.lista_tokens[0] in lista_temp2:
                     self.procedimento(21)
 
             # Caso topo da pilha seja <COMP>
             elif self.peek() == '<COMP>':
-                if self.lista_tokens[0] == '(' or 'number' or 'id':
+                lista_temp = ['(', 'number', 'id']
+                if self.lista_tokens[0] in lista_temp:
                     self.procedimento(34)
             
             # Caso topo da pilha seja <WHILE>
