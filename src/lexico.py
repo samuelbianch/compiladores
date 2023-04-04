@@ -60,6 +60,7 @@ class AnalisadorLexico():
     """Classe que analisa o texto de entrada e separa os tokens da linguagem implementada"""
 
     lista_tokens = []
+    lista_temp = []
     
     def __str__(self):
         return self.name
@@ -195,7 +196,11 @@ class AnalisadorLexico():
 
                 # Verificando se é um caractere limitador: ;(){}
                 if self.is_limiter(caracter_atual):
-                    self.lista_tokens.append(caracter_atual)
+                    self.lista_temp = []
+                    self.lista_temp.append(caracter_atual)
+                    self.lista_temp.append(linha_atual)
+                    self.lista_temp.append(i+1)
+                    self.lista_tokens.append(self.lista_temp)
                     arquivo_saida.write(self.token_limitador(caracter_atual)+','+caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
 
                 # Verificando se é operador matematico
@@ -205,37 +210,61 @@ class AnalisadorLexico():
                             # self.lista_tokens.append(caracter_atual + caracter_seguinte)
                             # arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + str(i+1) + '\n')
                         if caracter_atual + caracter_seguinte == '==':
-                            self.lista_tokens.append(caracter_atual+caracter_seguinte)
+                            self.lista_temp = []
+                            self.lista_temp.append(caracter_atual+caracter_seguinte)
+                            self.lista_temp.append(linha_atual)
+                            self.lista_temp.append(i+1)
+                            self.lista_tokens.append(self.lista_temp)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                             i = i + 2
                             continue
 
                         elif caracter_atual + caracter_seguinte == '!=':
-                            self.lista_tokens.append(caracter_atual+caracter_seguinte)
+                            self.lista_temp = []
+                            self.lista_temp.append(caracter_atual+caracter_seguinte)
+                            self.lista_temp.append(linha_atual)
+                            self.lista_temp.append(i+1)
+                            self.lista_tokens.append(self.lista_temp)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                             i = i + 2
                             continue
 
                         else:
-                            self.lista_tokens.append(caracter_atual)
+                            self.lista_temp = []
+                            self.lista_temp.append(caracter_atual)
+                            self.lista_temp.append(linha_atual)
+                            self.lista_temp.append(i+1)
+                            self.lista_tokens.append(self.lista_temp)
                             arquivo_saida.write(self.qual_operador(caracter_atual, caracter_seguinte) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
                 
                 # Verificando se é a seta do leia e escreva
                 if self.is_seta(str(caracter_atual) + str(caracter_seguinte)):
-                    self.lista_tokens.append(caracter_atual+caracter_seguinte)
+                    self.lista_temp = []
+                    self.lista_temp.append(caracter_atual+caracter_seguinte)
+                    self.lista_temp.append(linha_atual)
+                    self.lista_temp.append(i+1)
+                    self.lista_tokens.append(self.lista_temp)
                     arquivo_saida.write("tok11" + ',' + caracter_atual + caracter_seguinte + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
                 # Verificando caracter de alocação em memória
                 if i - 1 != -1:
                     if self.is_recebe(linha[i-1], caracter_atual):
-                        self.lista_tokens.append(caracter_atual)
+                        self.lista_temp = []
+                        self.lista_temp.append(caracter_atual)
+                        self.lista_temp.append(linha_atual)
+                        self.lista_temp.append(i+1)
+                        self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write("tok12" + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
 
                 # TODO
                 # Verificando se é um numero   
                 if caracter_seguinte != None and self.is_numero(caracter_atual):
-                    self.lista_tokens.append('number')
+                    self.lista_temp = []
+                    self.lista_temp.append('number')
+                    self.lista_temp.append(linha_atual)
+                    self.lista_temp.append(i+1)
+                    self.lista_tokens.append(self.lista_temp)
                     arquivo_saida.write(self.qual_numero(caracter_atual) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
                 
 
@@ -265,12 +294,23 @@ class AnalisadorLexico():
                         # print(temp)
                         # print(linha_atual)
                         # print(self.qual_palavra_reservada(temp))
-                        self.lista_tokens.append(temp)
+                        self.lista_temp = []
+                        self.lista_temp.append(temp)
+                        self.lista_temp.append(linha_atual)
+                        self.lista_temp.append(coluna+1)
+                        self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write(self.qual_palavra_reservada(temp) + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
                     else:
-                        self.lista_tokens.append('id')
+                        self.lista_temp = []
+                        self.lista_temp.append('id')
+                        self.lista_temp.append(linha_atual)
+                        self.lista_temp.append(i+1)
+                        self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write("tok400" + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
 
+                
+                else:
+                    print("Erro Léxico na linha: ", linha_atual+1, "coluna", coluna+1)
                 i += 1 # Incrementando a leitura dos caracteres da linha lida no momento
 
             linha = arquivo.readline() # Le a proxima linha
