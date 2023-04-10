@@ -52,7 +52,8 @@ import string
 # Delimitadores da linguagem
 DELIMITADORES = ";(){}"
 MATEMATICA = "+ - / * > < == !=".split()
-LETRA = string.ascii_letters
+CARACTERES_ACEITOS = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C D E F G H I J K L M N O P Q R S T U V X W Y Z + - / * > < = = ! = ; ( ) { } 0 1 2 3 4 5 6 7 8 9".split()
+LETRA = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C D E F G H I J K L M N O P Q R S T U V X W Y Z".split()
 NUMEROS = "0 1 2 3 4 5 6 7 8 9".split()
 PALAVRA_RESERVADA = "leia escreva se senao enquanto int =".split()
 
@@ -64,6 +65,16 @@ class AnalisadorLexico():
     
     def __str__(self):
         return self.name
+    
+    def is_caracter_valido(self, caracter):
+        """Verificação se é um caractere da linguagem proposta"""
+        if caracter in CARACTERES_ACEITOS:
+            return True
+        # Verificando se é aspas "
+        elif caracter == chr(34):
+            return True
+        
+        return False
 
     def is_limiter(self, caracter):
         """Verifica se um digito é delimitador de uma lista de comandos"""
@@ -194,6 +205,14 @@ class AnalisadorLexico():
                 if ((i+1) < tam_linha):
                     caracter_seguinte = linha[i+1]
 
+                
+                if self.is_caracter_valido(caracter_atual) is False:
+                    if caracter_atual != " " and caracter_atual != "\n":
+                        arquivo_saida.write("Erro Lexico na linha: " + str(linha_atual) + " coluna: " + str(i+1))
+                        print("Caracter atual: ", ord(caracter_atual))
+                        print("Erro Léxico na linha: ", linha_atual , " coluna: ", i+1)
+                        exit(0)
+
                 # Verificando se é um caractere limitador: ;(){}
                 if self.is_limiter(caracter_atual):
                     self.lista_temp = []
@@ -309,10 +328,9 @@ class AnalisadorLexico():
                         arquivo_saida.write("tok400" + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
 
                 
-                else:
-                    print("Erro Léxico na linha: ", linha_atual+1, "coluna", coluna+1)
                 i += 1 # Incrementando a leitura dos caracteres da linha lida no momento
-
+            linha_atual += 1
+                
             linha = arquivo.readline() # Le a proxima linha
 
         self.lista_tokens.append('$')
