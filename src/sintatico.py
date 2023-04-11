@@ -234,7 +234,7 @@ class AnalisadorSintatico:
 
     def analisa(self):
         """Analisador Sintatico"""
-        #print(self.lista_tokens)
+        # print(self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
 
@@ -257,10 +257,11 @@ class AnalisadorSintatico:
                     self.procedimento(0)
                 else:
                     print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0] + " - Linha: ", self.lista_tokens[0][1], ", Coluna: ", self.lista_tokens[0][2])
+                    exit(0)
 
             # Caso o topo da pilha seja <STMT_LIST>
             elif self.peek() == '<STMT_LIST>':
-                print(self.lista_tokens[0][0])
+                # print(self.lista_tokens[0][0])
                 lista_temp = ['$', '}']
                 lista_temp2 = ['id', 'leia', 'escreva', 'se', 'enquanto']
 
@@ -272,26 +273,28 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
-            
+                    exit(0)
+
             # Caso o topo da pilha seja <STMT>
             elif self.peek() == '<STMT>':
                 if self.lista_tokens[0][0] == 'id':
                     self.procedimento(6)
 
-                if self.lista_tokens[0][0] == 'leia':
+                elif self.lista_tokens[0][0] == 'leia':
                     self.procedimento(3)
 
-                if self.lista_tokens[0][0] == 'escreva':
+                elif self.lista_tokens[0][0] == 'escreva':
                     self.procedimento(4)
                 
-                if self.lista_tokens[0][0] == 'se':
+                elif self.lista_tokens[0][0] == 'se':
                     self.procedimento(5)
 
-                if self.lista_tokens[0][0] == 'enquanto':
+                elif self.lista_tokens[0][0] == 'enquanto':
                     self.procedimento(7)
 
                 else:
                     print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <GET>
             elif self.peek() == '<GET>':
@@ -300,6 +303,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se um ID, mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <EXPRESSION>
             elif self.peek() == '<EXPRESSION>':
@@ -309,6 +313,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se uma [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <RELATIONAL_OPERATOR>
             elif self.peek() == '<RELATIONAL_OPERATOR>':
@@ -327,7 +332,8 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se um operador relacional, mas foi encontrado: " + self.lista_tokens[0][0])
-            
+                    exit(0)
+
             # Caso topo da pilha seja <MESSAGE>
             elif self.peek() == '<MESSAGE>':
                 if self.lista_tokens[0][0] == ';':
@@ -344,7 +350,8 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
-                
+                    exit(0)
+
             # Caso topo da pilha seja <PLUS_MINUS>
             elif self.peek() == '<PLUS_MINUS>':
                 if self.lista_tokens[0][0] == '+':
@@ -355,7 +362,8 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se um sinal de mais ou menos, mas foi encontrado: " + self.lista_tokens[0][0])
-            
+                    exit(0)
+
             # Caso topo da pilha seja <TERM>
             elif self.peek() == '<TERM>':
                 lista_temp = ['(', 'id', 'number']
@@ -364,6 +372,7 @@ class AnalisadorSintatico:
                 
                 else:
                     print("ERRO! Esperava-se [(, id, number], mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <MULT_OPERATOR>
             elif self.peek() == '<MULT_OPERATOR>':
@@ -375,6 +384,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se uma o sinal de multiplicação ou divisão, mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <IF_ELSE>
             elif self.peek() == '<IF_ELSE>':
@@ -386,6 +396,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se o ';' ou o 'senao', mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <IF>
             elif self.peek() == '<IF>':
@@ -394,7 +405,8 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se o operador 'se', mas foi encontrado: " + self.lista_tokens[0][0])
-            
+                    exit(0)
+
             # Caso topo da pilha seja <ELSE>
             elif self.peek() == '<ELSE>':           
                 if self.lista_tokens[0][0] == 'senao':
@@ -402,6 +414,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se o operador 'senao', mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <FACTOR>
             elif self.peek() == '<FACTOR>':
@@ -416,6 +429,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <TERM_TAIL>
             elif self.peek() == '<TERM_TAIL>':
@@ -429,6 +443,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se operadores, mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
              # Caso topo da pilha seja <FACTOR_TAIL>
             elif self.peek() == '<FACTOR_TAIL>':
@@ -442,6 +457,7 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se operadores, mas foi encontrado: " + self.lista_tokens[0][0])
+                    exit(0)
 
             # Caso topo da pilha seja <COMP>
             elif self.peek() == '<COMP>':
@@ -451,7 +467,8 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
-            
+                    exit(0)
+
             # Caso topo da pilha seja <WHILE>
             elif self.peek() == '<WHILE>':
                 if self.lista_tokens[0][0] == 'enquanto':
@@ -459,12 +476,12 @@ class AnalisadorSintatico:
 
                 else:
                     print("ERRO! Esperava-se a palavra enquanto, mas foi encontrado: " + self.lista_tokens[0][0])
-
+                    exit(0)
             i += 1
 
-            if self.lista_tokens:
-                print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
-                print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
+            #if self.lista_tokens:
+                #print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
+                #print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
 
 
 # print(arquivo.readline())
