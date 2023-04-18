@@ -11,10 +11,15 @@ if sys.argv[1]:
             analisador_lexico = AnalisadorLexico()
             analisador_lexico.analisa(arquivo)
             arquivo.close()
+            
             analisador_sintatico = AnalisadorSintatico(analisador_lexico.get_lista_de_tokens())
             analisador_sintatico.analisa()
-            analisador_semantico = AnalisadorSemantico(analisador_lexico.get_lista_variaveis())
+
+            analisador_semantico = AnalisadorSemantico(analisador_lexico.get_lista_de_tokens())
             analisador_semantico.analisa()
+            
     except Exception as exception:
         print("Excecao ao ler arquivo", exception)
         raise 
+
+print("----------- Compilação finalizada! -----------")

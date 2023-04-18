@@ -190,7 +190,7 @@ class AnalisadorLexico():
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
         # Cria o arquivo de saída
-        arquivo_saida = open('saida_lexico.txt', 'w')
+        arquivo_saida = open('../out/saida_lexico.txt', 'w')
 
         # Lendo a linha da entrada
         linha = arquivo.readline()
@@ -327,7 +327,11 @@ class AnalisadorLexico():
                     else:
                         self.lista_temp = []
                         self.lista_temp.append('id')
-                        self.lista_variaveis.append(temp)
+                        list_temp = []
+                        list_temp.append(temp)
+                        list_temp.append(linha_atual)
+                        list_temp.append(i+1)
+                        self.lista_variaveis.append(list_temp)
                         self.lista_temp.append(linha_atual)
                         self.lista_temp.append(i+1)
                         self.lista_tokens.append(self.lista_temp)
