@@ -7,7 +7,7 @@ src/__pycache__/
 *.py[cod]
 *$py.class
 
-/src/saida*
+/out/
 # C extensions
 *.so
 
