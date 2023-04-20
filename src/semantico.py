@@ -4,21 +4,20 @@ class AnalisadorSemantico():
     def __init__(self, lista_tokens):
         self.lista_tokens = lista_tokens
 
-    def divisao_por_zero(self, linha):
-        # str(linha.replace(" ", ""))
-        if linha in "'":
-            return False
-        if linha in "/0":
-            return True
+    def divisao_por_zero(self, lista):
+        i = 0
+        while len(lista) > i:
+            x = lista[i]
+            lista_temp = x.split(",")
+            if 'tok302' in lista_temp:
+                x = lista[i+1]
+                lista_temp = x.split(",")
+                if 'tok200' in lista_temp:
+                    print("ERRO! Divisão por zero, linha: " + str(lista_temp[2]) + " coluna: " + str(lista_temp[3]))
+                    exit(0)
+            i += 1
 
     def analisa(self):
-        #tamanho_lista = len(self.lista_tokens)
-        print(self.lista_tokens)
-        i = 0
-
-        while self.lista_tokens:
-            if self.divisao_por_zero(self.lista_tokens[i]):
-                print("Erro semântico: divisão por zero")
-                exit(0)
-            
-            i += 1
+        with open('../out/saida_lexico.txt', 'r') as arquivo:
+            lista = arquivo.readlines()
+            self.divisao_por_zero(lista)

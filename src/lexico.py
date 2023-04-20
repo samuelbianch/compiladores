@@ -116,7 +116,7 @@ class AnalisadorLexico():
             
             position
 
-        return "token20" + str(position)
+        return "tok20" + str(position)
     
     def is_seta(self, entrada):
         """Verifica se a entrada é == ->"""
@@ -190,7 +190,7 @@ class AnalisadorLexico():
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
         # Cria o arquivo de saída
-        arquivo_saida = open('../out/saida_lexico.txt', 'w')
+        arquivo_saida = open('..\out\saida_lexico.txt', 'w')
 
         # Lendo a linha da entrada
         linha = arquivo.readline()

@@ -15,7 +15,7 @@ if sys.argv[1]:
             analisador_sintatico = AnalisadorSintatico(analisador_lexico.get_lista_de_tokens())
             analisador_sintatico.analisa()
 
-            analisador_semantico = AnalisadorSemantico(analisador_lexico.get_lista_de_tokens())
+            analisador_semantico = AnalisadorSemantico(analisador_lexico.get_lista_variaveis)
             analisador_semantico.analisa()
             
     except Exception as exception:
