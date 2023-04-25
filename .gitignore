@@ -4,6 +4,7 @@
 ### Python ###
 # Byte-compiled / optimized / DLL files
 src/__pycache__/
+out/
 *.py[cod]
 *$py.class
 

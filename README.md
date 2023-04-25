@@ -8,3 +8,7 @@ Para executar o compilador, entre na pasta ./src
 `
 python .\main.py ..\teste.txt
 `
+
+# Desenvolvido por
+
+Samuel Bianch (samuelbianch38@gmail.com)
