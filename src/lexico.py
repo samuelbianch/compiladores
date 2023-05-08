@@ -43,6 +43,7 @@ Tokens 300-399
 
 Tokens 400-499
 400 - id
+401 - string
 
 '''
 
@@ -50,7 +51,7 @@ Tokens 400-499
 import string
 
 # Delimitadores da linguagem
-DELIMITADORES = ";(){}"
+DELIMITADORES = ';(){}'
 MATEMATICA = "+ - / * > < == !=".split()
 CARACTERES_ACEITOS = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C D E F G H I J K L M N O P Q R S T U V X W Y Z + - / * > < = = ! = ; ( ) { } 0 1 2 3 4 5 6 7 8 9 \\".split()
 LETRA = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C D E F G H I J K L M N O P Q R S T U V X W Y Z".split()
@@ -324,6 +325,21 @@ class AnalisadorLexico():
                         self.lista_temp.append(coluna+1)
                         self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write(self.qual_palavra_reservada(temp) + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
+                    
+                    elif caracter_atual == '"':
+                        self.lista_temp = []
+                        self.lista_temp.append('string')
+                        list_temp = []
+                        list_temp.append(temp)
+                        list_temp.append(linha_atual)
+                        list_temp.append(i+1)
+                        self.lista_variaveis.append(list_temp)
+                        self.lista_temp.append(linha_atual)
+                        self.lista_temp.append(i+1)
+                        self.lista_tokens.append(self.lista_temp)
+                        arquivo_saida.write('tok401' + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
+
+                    
                     else:
                         self.lista_temp = []
                         self.lista_temp.append('id')

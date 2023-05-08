@@ -1,8 +1,8 @@
 
 class AnalisadorSemantico():
 
-    def __init__(self, lista_tokens):
-        self.lista_tokens = lista_tokens
+    def __init__(self):
+       pass
 
     def divisao_por_zero(self, lista):
         i = 0

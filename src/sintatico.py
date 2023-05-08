@@ -481,9 +481,9 @@ class AnalisadorSintatico:
                     exit(0)
             i += 1
 
-            #if self.lista_tokens:
+            if self.lista_tokens:
                 #print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
-                #print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
+                print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
 
 
 # print(arquivo.readline())
