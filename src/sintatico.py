@@ -234,7 +234,7 @@ class AnalisadorSintatico:
 
     def analisa(self):
         """Analisador Sintatico"""
-        # print(self.lista_tokens)
+        print("Lista de tokens", self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
 
@@ -242,8 +242,6 @@ class AnalisadorSintatico:
         saida = open('../out/saida_sintatico.txt', 'w')
         #print("Topo da pilha: " + self.peek())
         while len(self.lista_tokens) > 0:
-            # self.pilha_comandos.pop()
-            
 
             #print("Ultimo elemento: " + str(self.pilha_lexico[0]))
             saida.write(str(self.pilha_comandos) + "\n")
@@ -481,9 +479,9 @@ class AnalisadorSintatico:
                     exit(0)
             i += 1
 
-            if self.lista_tokens:
+            #if self.lista_tokens:
                 #print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
-                print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
+                #print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
 
 
 # print(arquivo.readline())

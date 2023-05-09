@@ -57,16 +57,18 @@ CARACTERES_ACEITOS = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C 
 LETRA = "a b c d e f g h i j k l m n o p q r s t u v x w y z A B C D E F G H I J K L M N O P Q R S T U V X W Y Z".split()
 NUMEROS = "0 1 2 3 4 5 6 7 8 9".split()
 PALAVRA_RESERVADA = "leia escreva se senao enquanto int =".split()
+lista_variaveis_to_intermediario = []
 
 class AnalisadorLexico():
     """Classe que analisa o texto de entrada e separa os tokens da linguagem implementada"""
 
-    lista_tokens = []
-    lista_temp = []
-    lista_variaveis = []
+    def __init__(self):
+        self.lista_tokens = []
+        self.lista_temp = []
+        self.lista_variaveis = []
 
     def __str__(self):
-        return self.name
+        return "Analisador Léxico"
     
     def is_caracter_valido(self, caracter):
         """Verificação se é um caractere da linguagem proposta"""
@@ -187,6 +189,10 @@ class AnalisadorLexico():
         """Retorna uma lista de variaveis na sequencia escrita pelo usuario"""
         return self.lista_variaveis
 
+    def get_lista_variaveis_to_intermediario():
+        """Retorna uma lista para a geração de código intermediária"""
+        return lista_variaveis_to_intermediario
+    
     def analisa(self, arquivo):
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
@@ -343,6 +349,7 @@ class AnalisadorLexico():
                     else:
                         self.lista_temp = []
                         self.lista_temp.append('id')
+                        lista_variaveis_to_intermediario.append(temp)
                         list_temp = []
                         list_temp.append(temp)
                         list_temp.append(linha_atual)
