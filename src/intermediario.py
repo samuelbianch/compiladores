@@ -33,7 +33,7 @@ class GeradorIntermediario():
         return expressao
 
     def get_expressao_infixa(self):
-       return pass
+       return None
 
     def gerador_intermediario(self):
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
