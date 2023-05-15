@@ -5,7 +5,8 @@ class GeradorIntermediario():
     def __init__(self, lista_variaveis):
         self.lista_variaveis = []
         self.lista_expressoes_pos_fixa = []
-    
+        self.lista_expressoes = []
+
     def remove_repetidos(self):
         lista_aux = []
         for i in self.lista_variaveis:
@@ -14,6 +15,24 @@ class GeradorIntermediario():
         
         lista_aux.sort()
         self.lista_variaveis = lista_aux
+
+    def get_lista_expressoes(self, lista):
+        i = 0
+        expressao = ""
+        while i < len(lista):
+            posicao = 0
+            lista_temp = lista[i].split(',')
+            print("Lista temp: ", lista_temp)
+            if AnalisadorLexico.is_math2(lista_temp[1]) and not AnalisadorLexico.is_limiter(self, lista_temp[1]):
+                expressao += lista_temp[1]
+            elif AnalisadorLexico.is_limiter(self, lista_temp[1]):
+                if not expressao:
+                    self.lista_expressoes.append(expressao)
+                    expressao = ""
+
+            i += 1 
+
+        print(self.lista_expressoes)
     
     def aloca_espaco_memoria(self):
         string = ""
@@ -28,7 +47,11 @@ class GeradorIntermediario():
     
     def expressao_pos_fixa(self):
         expressao = None
-
+        i = 0
+        while i < self.lista_expressoes:
+            expressao 
+            self.lista_expressoes_pos_fixa[i] = expressao
+            i += 1
 
         return expressao
 
@@ -41,6 +64,8 @@ class GeradorIntermediario():
         
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
+            self.get_lista_expressoes(lista)
+            arquivo.close()
         print(self.aloca_espaco_memoria())
 
 

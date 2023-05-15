@@ -47,9 +47,6 @@ Tokens 400-499
 
 '''
 
-
-import string
-
 # Delimitadores da linguagem
 DELIMITADORES = ';(){}'
 MATEMATICA = "+ - / * > < == !=".split()
@@ -157,6 +154,13 @@ class AnalisadorLexico():
         if entrada in MATEMATICA:
             return True
         elif str(entrada) + str(caracter_seguinte) in MATEMATICA:
+            return True
+        
+        return False
+    
+    def is_math2(entrada):
+        """Verifica se é um operador matemático, usado na geração de código intermediaria"""
+        if entrada in MATEMATICA:
             return True
         
         return False
