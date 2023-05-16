@@ -17,31 +17,36 @@ class GeradorIntermediario():
         self.lista_variaveis = lista_aux
 
     def get_lista_expressoes(self, lista):
-        itens_de_expressao = ['=', '(' , '>', '<', '==', ')']
+        itens_de_expressao = ['(' , '>', '<', '==', ')']
         numeros = '0 1 2 3 4 5 6 7 8 9'.split()
         i = 0
         expressao = ""
         while i < len(lista):
-            posicao = 0
             lista_temp = lista[i].split(',')
             print("Lista temp: ", lista_temp)
 
-            #if lista_temp[1] == '(':
-            #    lista_temp = lista[i+1].split(',')
-
+            # Ignora os caracteres após o simbolo do leia
             if lista_temp[1] == '->':
                 i += 2
                 expressao = ""
                 continue
+
+            # Limpa o que ele adicionou antes de um recebe
             if lista_temp[1] == '=':
                 i += 1
                 expressao = ""
                 continue
+
+            # Adiciona os numeros na expressao
             if lista_temp[1] in numeros:
                 expressao += lista_temp[1]
+
+            # Verifica se é um operador matemático ou um id
             if (AnalisadorLexico.is_math2(lista_temp[1]) or lista_temp[0] == 'tok400'):
                 expressao += lista_temp[1]
                 print("Expressao: ", expressao)
+
+            # Quando chegar em algum caracter limitador e a expressão não for vazia, ele adiciona na lista
             if AnalisadorLexico.is_limiter(self, lista_temp[1]):
                 if expressao:
                     self.lista_expressoes.append(expressao)
