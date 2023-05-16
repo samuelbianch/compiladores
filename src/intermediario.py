@@ -17,22 +17,40 @@ class GeradorIntermediario():
         self.lista_variaveis = lista_aux
 
     def get_lista_expressoes(self, lista):
+        itens_de_expressao = ['=', '(' , '>', '<', '==', ')']
+        numeros = '0 1 2 3 4 5 6 7 8 9'.split()
         i = 0
         expressao = ""
         while i < len(lista):
             posicao = 0
             lista_temp = lista[i].split(',')
             print("Lista temp: ", lista_temp)
-            if AnalisadorLexico.is_math2(lista_temp[1]) and not AnalisadorLexico.is_limiter(self, lista_temp[1]):
+
+            #if lista_temp[1] == '(':
+            #    lista_temp = lista[i+1].split(',')
+
+            if lista_temp[1] == '->':
+                i += 2
+                expressao = ""
+                continue
+            if lista_temp[1] == '=':
+                i += 1
+                expressao = ""
+                continue
+            if lista_temp[1] in numeros:
                 expressao += lista_temp[1]
-            elif AnalisadorLexico.is_limiter(self, lista_temp[1]):
-                if not expressao:
+            if (AnalisadorLexico.is_math2(lista_temp[1]) or lista_temp[0] == 'tok400'):
+                expressao += lista_temp[1]
+                print("Expressao: ", expressao)
+            if AnalisadorLexico.is_limiter(self, lista_temp[1]):
+                if expressao:
                     self.lista_expressoes.append(expressao)
                     expressao = ""
 
             i += 1 
 
-        print(self.lista_expressoes)
+        print("Expressao: ", self.lista_expressoes)
+        print("Tamanho Expressao: ", len(self.lista_expressoes))
     
     def aloca_espaco_memoria(self):
         string = ""
