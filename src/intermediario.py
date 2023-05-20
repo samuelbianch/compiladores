@@ -17,7 +17,6 @@ class GeradorIntermediario():
         self.lista_variaveis = lista_aux
 
     def get_lista_expressoes(self, lista):
-        itens_de_expressao = ['(' , '>', '<', '==', ')']
         numeros = '0 1 2 3 4 5 6 7 8 9'.split()
         i = 0
         expressao = ""
@@ -46,8 +45,14 @@ class GeradorIntermediario():
                 expressao += lista_temp[1]
                 print("Expressao: ", expressao)
 
+            if lista_temp[1] == '(':
+                expressao += '('
+            
+            if lista_temp[1] == ')':
+                expressao += ')'
+            
             # Quando chegar em algum caracter limitador e a expressão não for vazia, ele adiciona na lista
-            if AnalisadorLexico.is_limiter(self, lista_temp[1]):
+            if AnalisadorLexico.is_limiter(self, lista_temp[1]) and lista_temp[1] != '(':
                 if expressao:
                     self.lista_expressoes.append(expressao)
                     expressao = ""
