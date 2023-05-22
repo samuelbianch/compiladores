@@ -4,6 +4,8 @@ from lexico import AnalisadorLexico
 from sintatico import AnalisadorSintatico
 from semantico import AnalisadorSemantico
 from intermediario import GeradorIntermediario
+from gerador_codigo import GeradorCodigo
+
 if sys.argv[1]:
     try:
         with open(sys.argv[1], "r") as arquivo:
@@ -20,6 +22,9 @@ if sys.argv[1]:
 
             gerador_intermediario = GeradorIntermediario(analisador_lexico.get_lista_variaveis())
             gerador_intermediario.gerador_intermediario()
+
+            gerador_codigo = GeradorCodigo()
+            gerador_codigo.main()
 
             
     except Exception as exception:

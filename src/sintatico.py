@@ -234,7 +234,7 @@ class AnalisadorSintatico:
 
     def analisa(self):
         """Analisador Sintatico"""
-        #print("Lista de tokens", self.lista_tokens)
+        print("Lista de tokens", self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
 

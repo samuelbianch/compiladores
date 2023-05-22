@@ -336,7 +336,7 @@ class AnalisadorLexico():
                         self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write(self.qual_palavra_reservada(temp) + ',' + temp + ',' + str(linha_atual) + ',' + str(coluna+1) + '\n')
                     
-                    elif caracter_atual == '"':
+                    elif '"' in linha:
                         self.lista_temp = []
                         self.lista_temp.append('string')
                         list_temp = []

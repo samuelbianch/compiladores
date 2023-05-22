@@ -6,6 +6,7 @@ class GeradorIntermediario():
         self.lista_variaveis = []
         self.lista_expressoes_pos_fixa = []
         self.lista_expressoes = []
+        self.lista_strings = []
 
     def remove_repetidos(self):
         lista_aux = []
@@ -16,13 +17,23 @@ class GeradorIntermediario():
         lista_aux.sort()
         self.lista_variaveis = lista_aux
 
+    def get_string(self, lista):
+        i = 0        
+        while i < len(lista):
+            lista_temp = lista[i].split(',')
+            #print(lista_temp)
+            if lista_temp[0] == 'tok401':
+                self.lista_strings.append(lista_temp[1])
+
+            i += 1
+
     def get_lista_expressoes(self, lista):
         numeros = '0 1 2 3 4 5 6 7 8 9'.split()
         i = 0
         expressao = ""
         while i < len(lista):
             lista_temp = lista[i].split(',')
-            print("Lista temp: ", lista_temp)
+            # print("Lista temp: ", lista_temp)
 
             # Ignora os caracteres após o simbolo do leia
             if lista_temp[1] == '->':
@@ -43,7 +54,7 @@ class GeradorIntermediario():
             # Verifica se é um operador matemático ou um id
             if (AnalisadorLexico.is_math2(lista_temp[1]) or lista_temp[0] == 'tok400'):
                 expressao += lista_temp[1]
-                print("Expressao: ", expressao)
+                #print("Expressao: ", expressao)
 
             if lista_temp[1] == '(':
                 expressao += '('
@@ -68,7 +79,16 @@ class GeradorIntermediario():
         i = 0
 
         while i < len(self.lista_variaveis):
-            string += self.lista_variaveis[i] + ": DB 8\n"
+            string += self.lista_variaveis[i] + " DB " + "%d," + " 0x0\n"
+            i += 1
+
+        return string
+    
+    def declara_texto(self):
+        string = ""
+        i = 0
+        while i < len(self.lista_strings):
+            string += "string" + str(i) + " '" + self.lista_strings[i] + "', 10, 0\n"
             i += 1
 
         return string
@@ -93,7 +113,10 @@ class GeradorIntermediario():
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.get_lista_expressoes(lista)
+            self.get_string(lista)
             arquivo.close()
         print(self.aloca_espaco_memoria())
+        
+        print(self.declara_texto())
 
 
