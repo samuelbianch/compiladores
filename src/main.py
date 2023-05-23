@@ -21,9 +21,9 @@ if sys.argv[1]:
             analisador_semantico.analisa()
 
             gerador_intermediario = GeradorIntermediario(analisador_lexico.get_lista_variaveis())
-            gerador_intermediario.gerador_intermediario()
+            to_gerador_codigo = gerador_intermediario.gerador_intermediario()
 
-            gerador_codigo = GeradorCodigo()
+            gerador_codigo = GeradorCodigo(to_gerador_codigo)
             gerador_codigo.main()
 
             

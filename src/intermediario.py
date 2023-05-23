@@ -8,6 +8,15 @@ class GeradorIntermediario():
         self.lista_expressoes = []
         self.lista_strings = []
 
+        self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
+        self.remove_repetidos()
+        
+        with open('../out/saida_lexico.txt', 'r') as arquivo:
+            lista = arquivo.readlines()
+            self.get_lista_expressoes(lista)
+            self.get_string(lista)
+            arquivo.close()
+
     def remove_repetidos(self):
         lista_aux = []
         for i in self.lista_variaveis:
@@ -74,21 +83,22 @@ class GeradorIntermediario():
         print("Tamanho Expressao: ", len(self.lista_expressoes))
     
     def aloca_espaco_memoria(self):
-        string = ""
+        string = self.declara_texto()
+        string += "\n\nsection .bss ; declara as variaveis\n"
 
         i = 0
 
         while i < len(self.lista_variaveis):
-            string += self.lista_variaveis[i] + " DB " + "%d," + " 0x0\n"
+            string += '   ' + self.lista_variaveis[i] + ': RESD ' + '1\n'
             i += 1
 
         return string
     
     def declara_texto(self):
-        string = ""
+        string = "section .data ; declara constantes\n"
         i = 0
         while i < len(self.lista_strings):
-            string += "string" + str(i) + " '" + self.lista_strings[i] + "', 10, 0\n"
+            string += "   string" + str(i) + ": " + "DB " + "'" + self.lista_strings[i] + "', 10, 0\n"
             i += 1
 
         return string
@@ -103,20 +113,10 @@ class GeradorIntermediario():
 
         return expressao
 
-    def get_expressao_infixa(self):
-       return None
+    def declara_section_ponto_texto(self):
+       return "\n\nsection .text ; importa scanf e printf do gcc compiler\n   global _main\n   extern _printf\n   extern _scanf"
 
     def gerador_intermediario(self):
-        self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
-        self.remove_repetidos()
-        
-        with open('../out/saida_lexico.txt', 'r') as arquivo:
-            lista = arquivo.readlines()
-            self.get_lista_expressoes(lista)
-            self.get_string(lista)
-            arquivo.close()
-        print(self.aloca_espaco_memoria())
-        
-        print(self.declara_texto())
+        return self.aloca_espaco_memoria() + self.declara_section_ponto_texto()
 
 
