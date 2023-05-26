@@ -1,25 +1,18 @@
 section .data ; declara constantes
-   string0: DB 'ERRO', 10, 0
+   string0: DB 'TrianguloEquilatero', 10, 0
+   string1: DB 'Isoceles', 10, 0
+   string2: DB 'Isoceles', 10, 0
+   string3: DB 'Escaleno', 10, 0
+   string4: DB 'ERRO', 10, 0
 
 
 section .bss ; declara as variaveis
-   aux: RESD 1
-   colunaatual: RESD 1
-   denominador: RESD 1
-   fatorialn: RESD 1
-   fatorialp: RESD 1
-   fatorialx: RESD 1
-   linhaatual: RESD 1
-   linhastotal: RESD 1
-   n: RESD 1
-   p: RESD 1
-   resultado: RESD 1
+   a: RESD 1
+   b: RESD 1
+   c: RESD 1
 
 
 section .text ; importa scanf e printf do gcc compiler
    global _main
    extern _printf
    extern _scanf
-
-_main:
-   MOV eax, 10
