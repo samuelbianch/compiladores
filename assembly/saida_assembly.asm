@@ -16,3 +16,9 @@ section .text ; importa scanf e printf do gcc compiler
    global _main
    extern _printf
    extern _scanf
+
+_main:
+   push ebp
+ 	mov ebp,esp
+   push dword string0
+   ret
