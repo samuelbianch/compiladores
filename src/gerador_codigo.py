@@ -5,13 +5,15 @@ class GeradorCodigo():
     def __init__(self, intermediario):
         self.saida = open('../assembly/saida_assembly.asm', 'w')
         self.intermediario = intermediario
-        with open('/out/saida_lexico.txt', 'r') as arquivo:
+        with open('../out/saida_lexico.txt', 'r') as arquivo:
             self.arquivo = arquivo
-            arquivo.close()
+            #arquivo.close()
 
 
     def main(self):
         self.saida.write(self.intermediario)
+        linha = self.arquivo.readline()
+        print(linha)
 
     def comparacao(self, entrada1, entrada2):
         string = "CMP " + entrada1 + ", " + entrada2
@@ -41,4 +43,18 @@ class GeradorCodigo():
         string = "CALL" + entrada
         return string
     
+    def repeticao(self):
+        string = ".repete\n"
+        string += self.condicao()
+        return string
     
+    def condicao(self,entrada):
+        if entrada == '>':
+            self.maior_que()
+        if entrada == '<':
+            self.menor_que()
+        if entrada == '==':
+            self.igual()
+        if entrada == '!=':
+            self.diferente()
+        

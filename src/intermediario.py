@@ -1,4 +1,5 @@
 from lexico import AnalisadorLexico
+from typing import List
 
 class GeradorIntermediario():
 
@@ -10,12 +11,19 @@ class GeradorIntermediario():
 
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         self.remove_repetidos()
-        
+        self.pilha: List[str] = []
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.get_lista_expressoes(lista)
             self.get_string(lista)
             arquivo.close()
+
+    def empilha(self, elemento):
+        self.pilha.append(elemento)
+
+    def desempilha(self):
+        if len(self.pilha_comandos) > 0:
+            self.pilha.pop()
 
     def remove_repetidos(self):
         lista_aux = []
@@ -106,17 +114,75 @@ class GeradorIntermediario():
     def expressao_pos_fixa(self):
         expressao = None
         i = 0
-        while i < self.lista_expressoes:
-            expressao 
+        while i < len(self.lista_expressoes):
+            expressao
             self.lista_expressoes_pos_fixa[i] = expressao
             i += 1
 
         return expressao
 
+    def isOperador(self, s):
+        if s == "+" or s == "-" or s == "*" or s == "/" or s == "$":
+            return True
+        else:
+            return False
+
+    def prioridade(self, c, t):
+        """Verifica a prioridade entre os operandos"""
+        if c == '$':
+            pc = 4
+        elif c == '*' or c == '/':
+            pc = 2
+        elif c == '+' or c == '-':
+            pc = 1
+        else:
+            pc = 4
+    
+        if t == '$':
+            pt = 3
+        elif t == '*' or t == '/':
+            pt = 2
+        elif t == '+' or t == '-':
+            pt = 1
+        else:
+            pt = 0
+
+        return pc <= pt
+
+    def postfix(self):
+        """Converte uma expressao infixa em posfixa"""
+
+        for i in range(len(self.lista_expressoes[28])):
+            c = self.lista_expressoes[i]
+            if c >= '0' and c <= '9' or c.lower() >= 'a' and c.lower() <= 'z':
+                self.empilha(c)
+            elif self.isOperador(c):
+                while not len(self.pilha) < 0 and self.prioridade(c, self.pilha.stacktop()):
+                    t = self.desempilha()
+                    self.empilha(t)
+                self.pilha.push(c)
+            elif c == '(':
+                self.pilha.push(c)
+            elif c == ')':
+                while True:
+                    t = self.desempilha()
+                    if t != '(':
+                        self.empilha(t)
+                    else:
+                        break
+        while not len(self.pilha) > 0:
+            self.empilha(self.desempilha())
+
+        self.pilha = "".join(self.pilha)
+
+        self.lista_expressoes_pos_fixa = self.pilha
+        print("Lista pos fixa: " + self.lista_expressoes_pos_fixa)
+
     def declara_section_ponto_texto(self):
        return "\n\nsection .text ; importa scanf e printf do gcc compiler\n   global _main\n   extern _printf\n   extern _scanf"
 
     def gerador_intermediario(self):
+        self.postfix()
         return self.aloca_espaco_memoria() + self.declara_section_ponto_texto()
 
 
