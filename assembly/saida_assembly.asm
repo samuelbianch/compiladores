@@ -1,5 +1,5 @@
 section .data ; declara constantes
-   string0: DB 'TrianguloEquilatero', 10, 0
+   string0: DB 'Equilatero', 10, 0
    string1: DB 'Isoceles', 10, 0
    string2: DB 'Isoceles', 10, 0
    string3: DB 'Escaleno', 10, 0
@@ -16,9 +16,3 @@ section .text ; importa scanf e printf do gcc compiler
    global _main
    extern _printf
    extern _scanf
-
-_main:
-   push ebp
- 	mov ebp,esp
-   push dword string0
-   ret
