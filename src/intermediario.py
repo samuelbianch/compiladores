@@ -103,10 +103,10 @@ class GeradorIntermediario():
         return string
     
     def declara_texto(self):
-        string = "section .data ; declara constantes\n"
+        string = 'section .data ; declara constantes\n\tin_out DB "%d", 0x0\n'
         i = 0
         while i < len(self.lista_strings):
-            string += "   string" + str(i) + ": " + "DB " + "'" + self.lista_strings[i] + "', 10, 0\n"
+            string += "\tstring" + str(i) + ": " + "DB " + "'" + self.lista_strings[i] + "', 10, 0\n"
             i += 1
 
         return string
@@ -179,7 +179,7 @@ class GeradorIntermediario():
         print("Lista pos fixa: " + self.lista_expressoes_pos_fixa)
 
     def declara_section_ponto_texto(self):
-       return "\n\nsection .text ; importa scanf e printf do gcc compiler\n   global main\n   extern printf\n   extern scanf"
+       return "\n\nsection .text ; importa scanf e printf do gcc compiler\n\tglobal main\n\textern printf\n\textern scanf"
 
     def gerador_intermediario(self):
         #self.postfix()

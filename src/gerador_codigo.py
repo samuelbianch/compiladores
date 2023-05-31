@@ -5,6 +5,7 @@ class GeradorCodigo():
     def __init__(self, intermediario):
         self.saida = open('../assembly/saida_assembly.asm', 'w')
         self.intermediario = intermediario
+        self.cont_string = -1
         self.lista_por_comandos = []
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
@@ -23,12 +24,19 @@ class GeradorCodigo():
             i += 1
         print(self.lista_por_comandos)
         i = 0
-        while self.lista_por_comandos:
+        while i < len(self.lista_por_comandos):
             if self.lista_por_comandos[i][1] == 'leia':
                 self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
-                break
+
+            if self.lista_por_comandos[i][1] == 'escreva':
+                self.saida.write(self.escreva_inteiro())
+
+            i += 1
                 
 
+    def incrementa_string(self):
+        self.cont_string += 1
+        return self.cont_string
 
     def comparacao(self, entrada1, entrada2):
         string = "CMP " + entrada1 + ", " + entrada2
@@ -74,5 +82,9 @@ class GeradorCodigo():
             self.diferente(ex1, ex2)
         
     def leia(self, entrada):
-        string = "\tPUSH " + entrada +"\n\tCALL scanf"
+        string = "\tPUSH " + entrada +"\n\tPUSH in_out\n\tCALL scanf"
+        return string
+
+    def escreva_inteiro(self):
+        string = "\n\tMOV eax, [" + str(self.incrementa_string()) + "]\n\tPUSH eax\n\tPUSH in_out\n\tCALL printf"
         return string
