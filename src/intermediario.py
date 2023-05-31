@@ -179,10 +179,10 @@ class GeradorIntermediario():
         print("Lista pos fixa: " + self.lista_expressoes_pos_fixa)
 
     def declara_section_ponto_texto(self):
-       return "\n\nsection .text ; importa scanf e printf do gcc compiler\n   global _main\n   extern _printf\n   extern _scanf"
+       return "\n\nsection .text ; importa scanf e printf do gcc compiler\n   global main\n   extern printf\n   extern scanf"
 
     def gerador_intermediario(self):
-        self.postfix()
+        #self.postfix()
         return self.aloca_espaco_memoria() + self.declara_section_ponto_texto()
 
 

@@ -4,12 +4,13 @@ section .data
 section .bss
 
 section .text
-    global _main
-    extern _printf
+    global main
+    extern printf
 
-_main:
+main:
+    mov ebp, esp; for correct debugging
     CONST equ (5*4-(8/4)) / 3
     MOV eax, CONST
     PUSH eax
-    CALL _printf
+    CALL printf
     RET

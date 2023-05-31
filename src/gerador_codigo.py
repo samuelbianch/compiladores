@@ -5,15 +5,30 @@ class GeradorCodigo():
     def __init__(self, intermediario):
         self.saida = open('../assembly/saida_assembly.asm', 'w')
         self.intermediario = intermediario
+        self.lista_por_comandos = []
         with open('../out/saida_lexico.txt', 'r') as arquivo:
-            self.arquivo = arquivo
-            #arquivo.close()
+            self.lista_lexica = arquivo.readlines()
+            arquivo.close()
+
+        
 
 
     def main(self):
         self.saida.write(self.intermediario)
-        linha = self.arquivo.readline()
-        print(linha)
+        self.saida.write("\n\nmain:\n")
+        i = 0
+        while i < len(self.lista_lexica):
+            comando = self.lista_lexica[i].split(',')
+            self.lista_por_comandos.append(comando)
+            i += 1
+        print(self.lista_por_comandos)
+        i = 0
+        while self.lista_por_comandos:
+            if self.lista_por_comandos[i][1] == 'leia':
+                self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
+                break
+                
+
 
     def comparacao(self, entrada1, entrada2):
         string = "CMP " + entrada1 + ", " + entrada2
@@ -48,13 +63,16 @@ class GeradorCodigo():
         string += self.condicao()
         return string
     
-    def condicao(self,entrada):
-        if entrada == '>':
-            self.maior_que()
-        if entrada == '<':
-            self.menor_que()
-        if entrada == '==':
-            self.igual()
-        if entrada == '!=':
-            self.diferente()
+    def condicao(self, ex1, op, ex2):
+        if op == '>':
+            self.maior_que(ex1, ex2)
+        if op == '<':
+            self.menor_que(ex1, ex2)
+        if op == '==':
+            self.igual(ex1, ex2)
+        if op == '!=':
+            self.diferente(ex1, ex2)
         
+    def leia(self, entrada):
+        string = "\tPUSH " + entrada +"\n\tCALL scanf"
+        return string
