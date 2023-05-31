@@ -1,20 +1,16 @@
 section .data ; declara constantes
 	in_out DB "%d", 0x0
-	string0: DB 'ERRO', 10, 0
+	string0: DB 'Equilatero', 10, 0
+	string1: DB 'Isoceles', 10, 0
+	string2: DB 'Isoceles', 10, 0
+	string3: DB 'Escaleno', 10, 0
+	string4: DB 'ERRO', 10, 0
 
 
 section .bss ; declara as variaveis
-   aux: RESD 1
-   colunaatual: RESD 1
-   denominador: RESD 1
-   fatorialn: RESD 1
-   fatorialp: RESD 1
-   fatorialx: RESD 1
-   linhaatual: RESD 1
-   linhastotal: RESD 1
-   n: RESD 1
-   p: RESD 1
-   resultado: RESD 1
+   a: RESD 1
+   b: RESD 1
+   c: RESD 1
 
 
 section .text ; importa scanf e printf do gcc compiler
@@ -23,18 +19,31 @@ section .text ; importa scanf e printf do gcc compiler
 	extern scanf
 
 main:
-	PUSH linhastotal
+
+
+	PUSH a; lendo uma entrada
 	PUSH in_out
 	CALL scanf
-	MOV eax, [0]
-	PUSH eax
+
+	PUSH b; lendo uma entrada
 	PUSH in_out
+	CALL scanf
+
+	PUSH c; lendo uma entrada
+	PUSH in_out
+	CALL scanf
+
+	PUSH string0; escrevendo string em tela
 	CALL printf
-	MOV eax, [1]
-	PUSH eax
-	PUSH in_out
+
+	PUSH string1; escrevendo string em tela
 	CALL printf
-	MOV eax, [2]
-	PUSH eax
-	PUSH in_out
+
+	PUSH string2; escrevendo string em tela
+	CALL printf
+
+	PUSH string3; escrevendo string em tela
+	CALL printf
+
+	PUSH string4; escrevendo string em tela
 	CALL printf

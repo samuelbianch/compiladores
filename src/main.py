@@ -21,9 +21,10 @@ if sys.argv[1]:
             analisador_semantico.analisa()
 
             gerador_intermediario = GeradorIntermediario(analisador_lexico.get_lista_variaveis())
-            to_gerador_codigo = gerador_intermediario.gerador_intermediario()
+            to_gerador_codigo_basic = gerador_intermediario.gerador_intermediario()
+            to_gerador_codigo_lista_expressoes = gerador_intermediario.get_lista_expressoes(analisador_lexico.get_lista_de_tokens())
 
-            gerador_codigo = GeradorCodigo(to_gerador_codigo)
+            gerador_codigo = GeradorCodigo(to_gerador_codigo_basic, to_gerador_codigo_lista_expressoes)
             gerador_codigo.main()
 
             
