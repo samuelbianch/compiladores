@@ -87,8 +87,10 @@ class GeradorIntermediario():
 
             i += 1 
 
-        print("Expressao: ", self.lista_expressoes)
-        print("Tamanho Expressao: ", len(self.lista_expressoes))
+        # print("Expressao: ", self.lista_expressoes)
+        # print("Tamanho Expressao: ", len(self.lista_expressoes))
+
+        return self.lista_expressoes
     
     def aloca_espaco_memoria(self):
         string = self.declara_texto()

@@ -8,6 +8,7 @@ class GeradorCodigo():
         self.cont_string = -1
         self.lista_por_comandos = []
         self.lista_expressoes = lista_expressoes
+        print("Aqui fio: ", lista_expressoes)
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
             arquivo.close()
@@ -23,7 +24,7 @@ class GeradorCodigo():
             comando = self.lista_lexica[i].split(',')
             self.lista_por_comandos.append(comando)
             i += 1
-        print(self.lista_por_comandos)
+        #print(self.lista_por_comandos)
         i = 0
         contador_expressoes = 0
         while i < len(self.lista_por_comandos):
@@ -35,20 +36,21 @@ class GeradorCodigo():
                 self.saida.write(self.escreva_string())
                 i += 1
 
+            elif self.lista_por_comandos[i][1] == 'se':
+                i += 2
+                ex1 = ""
+                ex2 = ""
+                ex1 += self.lista_por_comandos[i][1]
+                i += 1
+                op = self.lista_por_comandos[i][1]
+                i += 1
+                ex2 += self.lista_por_comandos[i][1]
+                i += 1
+                self.saida.write(self.condicao(ex1, op, ex2))
+
             else:
                 i += 1
-            '''if self.lista_por_comandos[i][1] == 'se':
-                op = ['==', '!=', '>', '<']
-                if op in self.lista_expressoes[contador_expressoes]:
-
-                    self.saida.write(self.condicao(op))'''
             
-            
-
-
-            
-                
-
     def incrementa_string(self):
         self.cont_string += 1
         return self.cont_string
@@ -58,43 +60,46 @@ class GeradorCodigo():
         return string
     
     def menor_que(self, entrada1, entrada2):
-        string = "JL" + entrada1 + ", " + entrada2
+        string = "\n\tJL " + entrada1 + ", " + entrada2
         return string
     
     def igual(self, entrada1, entrada2):
-        string = "JE" + entrada1 + ", " + entrada2
+        string = "\n\tJE " + entrada1 + ", " + entrada2
         return string
 
     def diferente(self, entrada1, entrada2):
-        string = "JNE" + entrada1 + ", " + entrada2
+        string = "\n\tJNE " + entrada1 + ", " + entrada2
         return string
     
     def maior_que(self, entrada1, entrada2):
-        string = "JG" + entrada1 + ", " + entrada2
+        string = "\n\tJG " + entrada1 + ", " + entrada2
         return string
     
     def pular_para(self, entrada):
-        string = "JMP" + entrada
+        string = "\n\tJMP " + entrada
         return string
     
     def chamada(self, entrada):
-        string = "CALL" + entrada
+        string = "\n\tCALL " + entrada
         return string
     
     def repeticao(self):
-        string = ".repete\n"
+        string = "\n\t.repete\n"
         string += self.condicao()
         return string
     
     def condicao(self, ex1, op, ex2):
+        string = ""
         if op == '>':
-            self.maior_que(ex1, ex2)
+            string = self.maior_que(ex1, ex2)
         if op == '<':
-            self.menor_que(ex1, ex2)
+            string = self.menor_que(ex1, ex2)
         if op == '==':
-            self.igual(ex1, ex2)
+            string = self.igual(ex1, ex2)
         if op == '!=':
-            self.diferente(ex1, ex2)
+            string = self.diferente(ex1, ex2)
+
+        return string
         
     def leia(self, entrada):
         string = "\n\n\tPUSH " + entrada +"; lendo uma entrada\n\tPUSH in_out\n\tCALL scanf"
