@@ -110,13 +110,15 @@ class AnalisadorLexico():
     def qual_numero(self, entrada):
         """Retorna qual o numero"""
         position = 0
-        for entrada in NUMEROS:
-            if entrada == NUMEROS:
+        while position < len(NUMEROS):
+            if NUMEROS[position] == entrada:
+                # print("Palavra reservada encontrada: ", PALAVRA_RESERVADA[position])
                 break
-            
-            position
+            position += 1
+        
+        print("Sou o numero: ", position)
 
-        return "tok20" + str(position)
+        return str(position)
     
     def is_seta(self, entrada):
         """Verifica se a entrada é == ->"""
@@ -295,12 +297,18 @@ class AnalisadorLexico():
                 # TODO
                 # Verificando se é um numero   
                 if caracter_seguinte != None and self.is_numero(caracter_atual):
+                    string = ""
+                    while self.is_numero(caracter_atual):
+                        string += self.qual_numero(caracter_atual)
+                        i += 1
+                        caracter_atual = linha[i]
                     self.lista_temp = []
                     self.lista_temp.append('number')
                     self.lista_temp.append(linha_atual)
                     self.lista_temp.append(i+1)
                     self.lista_tokens.append(self.lista_temp)
-                    arquivo_saida.write(self.qual_numero(caracter_atual) + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
+                    arquivo_saida.write("tok20" + string + ',' + string + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
+                    i -= 1
                 
 
                 # Verificando qual é a palavra reservada se nao for, é um id

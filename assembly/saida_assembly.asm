@@ -15,6 +15,7 @@ section .bss ; declara as variaveis
    n: RESD 1
    p: RESD 1
    resultado: RESD 1
+   x: RESD 1
 
 
 section .text ; importa scanf e printf do gcc compiler

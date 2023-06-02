@@ -6,6 +6,7 @@ class AnalisadorSemantico():
 
     def divisao_por_zero(self, lista):
         i = 0
+        # print("Verifiquei se a divisao é por zero")
         while len(lista) > i:
             x = lista[i]
             lista_temp = x.split(",")

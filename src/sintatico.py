@@ -272,7 +272,8 @@ class AnalisadorSintatico:
                     self.procedimento(1)
 
                 else:
-                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso o topo da pilha seja <STMT>
@@ -293,7 +294,8 @@ class AnalisadorSintatico:
                     self.procedimento(7)
 
                 else:
-                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <GET>
@@ -302,7 +304,8 @@ class AnalisadorSintatico:
                     self.procedimento(12)
 
                 else:
-                    print("ERRO! Esperava-se um ID, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se um ID, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <EXPRESSION>
@@ -312,7 +315,8 @@ class AnalisadorSintatico:
                     self.procedimento(17)
 
                 else:
-                    print("ERRO! Esperava-se uma [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se uma [(, number, id], mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <RELATIONAL_OPERATOR>
@@ -331,7 +335,8 @@ class AnalisadorSintatico:
                     self.procedimento(29)
 
                 else:
-                    print("ERRO! Esperava-se um operador relacional, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se um operador relacional, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <MESSAGE>
@@ -349,7 +354,8 @@ class AnalisadorSintatico:
                     self.procedimento(9)
 
                 else:
-                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se uma palavra reservada, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <PLUS_MINUS>
@@ -361,8 +367,8 @@ class AnalisadorSintatico:
                     self.procedimento(33)
 
                 else:
-                    print("ERRO! Esperava-se um sinal de mais ou menos, mas foi encontrado: " + self.lista_tokens[0][0])
-                    exit(0)
+                    print("ERRO! Esperava-se um sinal de mais ou menos, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
 
             # Caso topo da pilha seja <TERM>
             elif self.peek() == '<TERM>':
@@ -371,7 +377,8 @@ class AnalisadorSintatico:
                     self.procedimento(20)
                 
                 else:
-                    print("ERRO! Esperava-se [(, id, number], mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se [(, id, number], mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <MULT_OPERATOR>
@@ -383,7 +390,8 @@ class AnalisadorSintatico:
                     self.procedimento(31)
 
                 else:
-                    print("ERRO! Esperava-se uma o sinal de multiplicação ou divisão, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se uma o sinal de multiplicação ou divisão, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <IF_ELSE>
@@ -395,7 +403,8 @@ class AnalisadorSintatico:
                     self.procedimento(14)
 
                 else:
-                    print("ERRO! Esperava-se o ';' ou o 'senao', mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se o ';' ou o 'senao', mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <IF>
@@ -404,7 +413,8 @@ class AnalisadorSintatico:
                     self.procedimento(15)
 
                 else:
-                    print("ERRO! Esperava-se o operador 'se', mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se o operador 'se', mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <ELSE>
@@ -413,7 +423,8 @@ class AnalisadorSintatico:
                     self.procedimento(16)
 
                 else:
-                    print("ERRO! Esperava-se o operador 'senao', mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se o operador 'senao', mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <FACTOR>
@@ -428,7 +439,8 @@ class AnalisadorSintatico:
                     self.procedimento(24)
 
                 else:
-                    print("ERRO! Esperava-se [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se [(, number, id], mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <TERM_TAIL>
@@ -442,7 +454,8 @@ class AnalisadorSintatico:
                     self.procedimento(18)
 
                 else:
-                    print("ERRO! Esperava-se operadores, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se operadores, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
              # Caso topo da pilha seja <FACTOR_TAIL>
@@ -456,7 +469,8 @@ class AnalisadorSintatico:
                     self.procedimento(21)
 
                 else:
-                    print("ERRO! Esperava-se operadores, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se operadores, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <COMP>
@@ -466,7 +480,8 @@ class AnalisadorSintatico:
                     self.procedimento(34)
 
                 else:
-                    print("ERRO! Esperava-se [(, number, id], mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se [(, number, id], mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
 
             # Caso topo da pilha seja <WHILE>
@@ -475,7 +490,8 @@ class AnalisadorSintatico:
                     self.procedimento(35)
 
                 else:
-                    print("ERRO! Esperava-se a palavra enquanto, mas foi encontrado: " + self.lista_tokens[0][0])
+                    print("ERRO! Esperava-se a palavra enquanto, mas foi encontrado: ", end="")
+                    print(self.lista_tokens[0])
                     exit(0)
             i += 1
 
