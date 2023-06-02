@@ -15,7 +15,7 @@ class GeradorIntermediario():
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.get_lista_expressoes(lista)
-            self.get_string(lista)
+            self.lista_string__ = self.get_string(lista)
             arquivo.close()
 
     def empilha(self, elemento):
@@ -24,6 +24,9 @@ class GeradorIntermediario():
     def desempilha(self):
         if len(self.pilha_comandos) > 0:
             self.pilha.pop()
+
+    def get_string_to_code(self):
+        return self.lista_string__
 
     def remove_repetidos(self):
         lista_aux = []

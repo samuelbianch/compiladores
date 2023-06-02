@@ -23,8 +23,8 @@ if sys.argv[1]:
             gerador_intermediario = GeradorIntermediario(analisador_lexico.get_lista_variaveis())
             to_gerador_codigo_basic = gerador_intermediario.gerador_intermediario()
             to_gerador_codigo_lista_expressoes = gerador_intermediario.get_lista_expressoes(analisador_lexico.get_lista_de_tokens())
-
-            gerador_codigo = GeradorCodigo(to_gerador_codigo_basic, to_gerador_codigo_lista_expressoes)
+            to_gerador_codigo_lista_strings = gerador_intermediario.get_string_to_code()
+            gerador_codigo = GeradorCodigo(to_gerador_codigo_basic, to_gerador_codigo_lista_expressoes, to_gerador_codigo_lista_strings)
             gerador_codigo.main()
 
             
