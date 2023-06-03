@@ -27,7 +27,7 @@ class GeradorCodigo():
         return self.pilha[len(self.pilha)-1]
 
     def desempilha(self):
-        if len(self.pilha) > 0:
+        while len(self.pilha) > 0:
             print("Topo da pilha: ", self.peek())
             self.saida.write(self.peek())
             self.pilha.pop()
@@ -44,20 +44,30 @@ class GeradorCodigo():
             comando = self.lista_lexica[i].split(',')
             self.lista_por_comandos.append(comando)
             i += 1
-        #print(self.lista_por_comandos)
+        print(self.lista_por_comandos)
         i = 0
-        contador_expressoes = 0
+        posso_escrever = True
+        label = 0
+        jump = 1
         while i < len(self.lista_por_comandos):
+            
             if self.lista_por_comandos[i][1] == 'leia':
-                self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
-                i += 2
+                if posso_escrever:
+                    self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
+                    i += 2
+                else:
+                    self.empilha(self.leia(self.lista_por_comandos[i+2][1]))
+                    i += 2
 
             elif self.lista_por_comandos[i][1] == 'escreva':
-                self.saida.write(self.escreva_string())
-                i += 3
+                if posso_escrever:
+                    self.saida.write(self.escreva_string())
+                    i += 3
+                else:
+                    self.empilha(self.escreva_string())
+                    i += 3
 
             elif self.lista_por_comandos[i][1] == 'se':
-                label = self.cont_labels()
                 i += 2
                 ex1 = ""
                 ex2 = ""
@@ -66,16 +76,27 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-                i += 3
-                if self.lista_por_comandos[i][1] == '{':
-                    self.empilha()
-                self.empilha(self.condicao(ex1, op, ex2, label))
-                self.empilha("\n\nlabel_" + str(label) + ":")
+                if posso_escrever:
+                    self.saida.write(self.condicao(ex1, op, ex2, label))
+                    self.saida.write("\n\tJMP label_" + str(label))
+                    self.empilha("\n\nlabel_" + str(jump) + ":")         
+                else:
+                    self.empilha(self.condicao(ex1, op, ex2, label))
+                    self.empilha("\n\tJMP label_" + str(label))
+                    posso_escrever = False
+                #posso_escrever = True
+                    
 
+            elif self.lista_por_comandos[i][1] == '{':
+                label = self.cont_labels()
+                posso_escrever = False
+                #self.empilha("\n\nlabel_" + str(label) + ":")
 
             elif self.lista_por_comandos[i][1] == '}':
+                jump += 1
                 #self.empilha("\n\tRET")
                 self.desempilha()
+                posso_escrever = True
                 
 
             elif self.lista_por_comandos[i][1] == '=':
@@ -85,8 +106,10 @@ class GeradorCodigo():
                 while self.lista_por_comandos[i][1] != ';':
                     expressao = self.lista_por_comandos[i][1]
                     i += 1
-
-                self.saida.write(self.recebe(expressao, variavel))
+                if posso_escrever:
+                    self.saida.write(self.recebe(expressao, variavel))
+                else:
+                    self.empilha(self.recebe(expressao, variavel))
 
             i += 1
         self.empilha(self.labels)
@@ -148,7 +171,6 @@ class GeradorCodigo():
         
 
     def recebe(self, expressao, variavel):
-        # TODO
         if expressao in self.lista_variaveis:
             expressao = "[" + expressao + "]"
         return "\n\n\tMOV eax, " + expressao + "\n\tMOV [" + variavel + "], eax"

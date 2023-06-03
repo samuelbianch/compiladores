@@ -33,18 +33,20 @@ main:
 	PUSH in_out
 	CALL scanf
 
-	PUSH string0; escrevendo string em tela
-	CALL printf
-
-label_0:
-
 	MOV ebx, [a]
 	MOV ecx, [b]
 	CMP ebx, ecx
 	JE label_0
+	JMP label_0
 
-	PUSH string1; escrevendo string em tela
+	PUSH string0; escrevendo string em tela
 	CALL printf
+	JMP label_0
+
+	MOV ebx, [b]
+	MOV ecx, [c]
+	CMP ebx, ecx
+	JE label_0
 
 label_1:
 
@@ -52,26 +54,52 @@ label_1:
 	MOV ecx, [b]
 	CMP ebx, ecx
 	JE label_1
+	JMP label_1
 
-	PUSH string2; escrevendo string em tela
+	PUSH string1; escrevendo string em tela
 	CALL printf
-
-label_2:
+	JMP label_2
 
 	MOV ebx, [b]
 	MOV ecx, [c]
 	CMP ebx, ecx
-	JE label_2
-
-	PUSH string3; escrevendo string em tela
-	CALL printf
+	JNE label_2
 
 label_3:
+
+	MOV ebx, [b]
+	MOV ecx, [c]
+	CMP ebx, ecx
+	JE label_3
+	JMP label_3
+
+	PUSH string2; escrevendo string em tela
+	CALL printf
+	JMP label_4
+
+	MOV ebx, [b]
+	MOV ecx, [a]
+	CMP ebx, ecx
+	JNE label_4
+
+label_5:
 
 	MOV ebx, [a]
 	MOV ecx, [b]
 	CMP ebx, ecx
-	JNE label_3
+	JNE label_5
+	JMP label_5
+
+	PUSH string3; escrevendo string em tela
+	CALL printf
+	JMP label_6
+
+	MOV ebx, [a]
+	MOV ecx, [c]
+	CMP ebx, ecx
+	JNE label_6
+
+label_7:
 
 	PUSH string4; escrevendo string em tela
 	CALL printf
