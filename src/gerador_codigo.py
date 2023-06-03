@@ -1,5 +1,6 @@
 from intermediario import GeradorIntermediario
 from lexico import AnalisadorLexico
+from typing import List
 
 class GeradorCodigo():
     
@@ -12,11 +13,24 @@ class GeradorCodigo():
         self.lista_expressoes = lista_expressoes
         self.listaStrings = lista_strings
         self.labels = "\n\n"
+        self.pilha: List[str] = []
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         #print("Aqui fio: ", lista_expressoes)
         with open('../out/saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
             arquivo.close()
+
+    def empilha(self, elemento):
+        self.pilha.append(elemento)
+
+    def peek(self):
+        return self.pilha[len(self.pilha)-1]
+
+    def desempilha(self):
+        if len(self.pilha) > 0:
+            print("Topo da pilha: ", self.peek())
+            self.saida.write(self.peek())
+            self.pilha.pop()
 
     def cont_labels(self):
         self.contador_labels += 1
@@ -53,12 +67,15 @@ class GeradorCodigo():
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
                 i += 3
-                self.saida.write(self.condicao(ex1, op, ex2, label))
-                self.saida.write("\n\nlabel_" + str(label) + ":")
+                if self.lista_por_comandos[i][1] == '{':
+                    self.empilha()
+                self.empilha(self.condicao(ex1, op, ex2, label))
+                self.empilha("\n\nlabel_" + str(label) + ":")
 
 
             elif self.lista_por_comandos[i][1] == '}':
-                self.saida.write("\n\tRET\n")
+                #self.empilha("\n\tRET")
+                self.desempilha()
                 
 
             elif self.lista_por_comandos[i][1] == '=':
@@ -72,7 +89,7 @@ class GeradorCodigo():
                 self.saida.write(self.recebe(expressao, variavel))
 
             i += 1
-        self.saida.write(self.labels)
+        self.empilha(self.labels)
             
     def incrementa_string(self):
         self.cont_string += 1

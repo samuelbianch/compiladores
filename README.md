@@ -18,6 +18,7 @@ Este compilador gera código assembly para a arquitetura **NASM**, utilizando ta
 
 - Não aceita caracteres especiais (acentos, barras, entre outros...);
 - Não aceita o caractere espaço nas strings;
+- Não aceita expressões aritméticas nos operadores condicionais;
 
 # Desenvolvido por
 
