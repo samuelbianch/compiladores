@@ -12,7 +12,8 @@ class GeradorCodigo():
         self.lista_por_comandos = []
         self.lista_expressoes = lista_expressoes
         self.listaStrings = lista_strings
-        self.labels = "\n\n"
+        self.labels = ""
+        self.posso_escrever = True
         self.pilha: List[str] = []
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         #print("Aqui fio: ", lista_expressoes)
@@ -32,6 +33,11 @@ class GeradorCodigo():
             self.saida.write(self.peek())
             self.pilha.pop()
 
+    def vazia(self):
+        if len(self.pilha) > 0:
+            return False
+        return True
+
     def cont_labels(self):
         self.contador_labels += 1
         return self.contador_labels
@@ -46,27 +52,49 @@ class GeradorCodigo():
             i += 1
         print(self.lista_por_comandos)
         i = 0
-        posso_escrever = True
+        self.posso_escrever = True
         label = 0
-        jump = 1
+        jump = 0
+        contador_de_abertura = 0
         while i < len(self.lista_por_comandos):
             
             if self.lista_por_comandos[i][1] == 'leia':
-                if posso_escrever:
+                if self.vazia():
                     self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
-                    i += 2
                 else:
                     self.empilha(self.leia(self.lista_por_comandos[i+2][1]))
-                    i += 2
 
             elif self.lista_por_comandos[i][1] == 'escreva':
-                if posso_escrever:
+                if self.vazia():
                     self.saida.write(self.escreva_string())
-                    i += 3
                 else:
                     self.empilha(self.escreva_string())
-                    i += 3
 
+            elif self.lista_por_comandos[i][1] == '{':
+                contador_de_abertura += 1
+                label = self.cont_labels()
+                self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
+                self.saida.write("\n\nlabel_" + str(label) + ":")
+
+            elif self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+                jump += 1
+                #self.empilha("\n\tRET")
+                self.desempilha()
+                contador_de_abertura = 0
+                self.posso_escrever = True
+                
+
+            elif self.lista_por_comandos[i][1] == '=':
+                variavel = self.lista_por_comandos[i-1][1]
+                i += 1
+                expressao = 0
+                while self.lista_por_comandos[i][1] != ';':
+                    expressao = self.lista_por_comandos[i][1]
+                if self.vazia():
+                    self.saida.write(self.recebe(expressao, variavel))
+                else:
+                    self.empilha(self.recebe(expressao, variavel))
+            
             elif self.lista_por_comandos[i][1] == 'se':
                 i += 2
                 ex1 = ""
@@ -76,43 +104,20 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-                if posso_escrever:
+                if self.vazia():
                     self.saida.write(self.condicao(ex1, op, ex2, label))
-                    self.saida.write("\n\tJMP label_" + str(label))
-                    self.empilha("\n\nlabel_" + str(jump) + ":")         
+                    #self.saida.write("\n\tJMP label_" + str(label))
+                             
                 else:
+                    self.empilha("\n\nlabel_" + str(jump) + ":")
                     self.empilha(self.condicao(ex1, op, ex2, label))
-                    self.empilha("\n\tJMP label_" + str(label))
-                    posso_escrever = False
-                #posso_escrever = True
-                    
-
-            elif self.lista_por_comandos[i][1] == '{':
-                label = self.cont_labels()
-                posso_escrever = False
-                #self.empilha("\n\nlabel_" + str(label) + ":")
-
-            elif self.lista_por_comandos[i][1] == '}':
-                jump += 1
-                #self.empilha("\n\tRET")
-                self.desempilha()
-                posso_escrever = True
-                
-
-            elif self.lista_por_comandos[i][1] == '=':
-                variavel = self.lista_por_comandos[i-1][1]
-                i += 1
-                expressao = 0
-                while self.lista_por_comandos[i][1] != ';':
-                    expressao = self.lista_por_comandos[i][1]
-                    i += 1
-                if posso_escrever:
-                    self.saida.write(self.recebe(expressao, variavel))
-                else:
-                    self.empilha(self.recebe(expressao, variavel))
-
+                    #self.empilha("\n\tJMP label_" + str(label))
+                    self.posso_escrever = False
+                #self.posso_escrever = True
+            
+            print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
-        self.empilha(self.labels)
+            
             
     def incrementa_string(self):
         self.cont_string += 1
