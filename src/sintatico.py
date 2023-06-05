@@ -239,7 +239,7 @@ class AnalisadorSintatico:
         i = 1
 
         # Cria o arquivo de saída
-        saida = open('../out/saida_sintatico.txt', 'w')
+        saida = open('D:\Programação\compiladores\out\saida_sintatico.txt', 'w')
         #print("Topo da pilha: " + self.peek())
         while len(self.lista_tokens) > 0:
 

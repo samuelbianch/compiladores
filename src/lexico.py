@@ -203,7 +203,7 @@ class AnalisadorLexico():
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
         # Cria o arquivo de saída
-        arquivo_saida = open('..\out\saida_lexico.txt', 'w')
+        arquivo_saida = open('D:\Programação\compiladores\out\saida_lexico.txt', 'w')
 
         # Lendo a linha da entrada
         linha = arquivo.readline()

@@ -2,6 +2,18 @@ leia -> a;
 leia -> b;
 leia -> c;
 
+axu1 = a + b;
+aux2 = a + c;
+aux3 = b + c;
+
+se (aux1 < c) {
+    se (aux2 < b) {
+        se (aux3 < a) {
+            escreva -> "EhTriangulo";
+        }
+    }
+}
+
 se (a == b) {
     se (b == c) {
         escreva -> "Equilatero";

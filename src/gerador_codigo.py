@@ -5,7 +5,7 @@ from typing import List
 class GeradorCodigo():
     
     def __init__(self, intermediario, lista_expressoes, lista_strings):
-        self.saida = open('../assembly/saida_assembly.asm', 'w')
+        self.saida = open('D:\Programação\compiladores\\assembly\saida_assembly.asm', 'w')
         self.intermediario = intermediario
         self.cont_string = -1
         self.contador_labels = -1
@@ -14,30 +14,19 @@ class GeradorCodigo():
         self.listaStrings = lista_strings
         self.labels = ""
         self.posso_escrever = True
-        self.pilha: List[str] = []
+        self.lista = []
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         #print("Aqui fio: ", lista_expressoes)
-        with open('../out/saida_lexico.txt', 'r') as arquivo:
+        with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
             arquivo.close()
 
-    def empilha(self, elemento):
-        self.pilha.append(elemento)
-
-    def peek(self):
-        return self.pilha[len(self.pilha)-1]
-
-    def desempilha(self):
-        while len(self.pilha) > 0:
-            print("Topo da pilha: ", self.peek())
-            self.saida.write(self.peek())
-            self.pilha.pop()
-
-    def vazia(self):
-        if len(self.pilha) > 0:
-            return False
-        return True
-
+    def elemento_lista(self):
+        if len(self.lista) > 0:
+            aux = self.lista[0]
+            self.lista.remove(aux)
+            return aux
+        
     def cont_labels(self):
         self.contador_labels += 1
         return self.contador_labels
@@ -56,37 +45,31 @@ class GeradorCodigo():
         label = 0
         jump = 0
         contador_de_abertura = 0
+        contador = 0
         while i < len(self.lista_por_comandos):
             
             if self.lista_por_comandos[i][1] == 'leia':
-                if self.vazia():
+                if not len(self.lista) > 0:
                     self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
                 else:
-                    self.empilha(self.leia(self.lista_por_comandos[i+2][1]))
+                    self.lista.append(self.leia(self.lista_por_comandos[i+2][1]))
 
             elif self.lista_por_comandos[i][1] == 'escreva':
-                if self.vazia():
+                if not len(self.lista) > 0:
                     self.saida.write(self.escreva_string())
                 else:
-                    self.empilha(self.escreva_string())
+                    self.lista.append(self.escreva_string())
 
             elif self.lista_por_comandos[i][1] == '{':
-                contador_de_abertura += 1
                 label = self.cont_labels()
-                self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
+                #self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
                 self.saida.write("\n\nlabel_" + str(label) + ":")
 
-            elif self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';' and self.lista_por_comandos[i+1][1] == 'senao':
-                jump += 1
-                #self.empilha("\n\tRET")
-                if condicao_enquanto:
-                    self.desempilha()
-                    self.saida.write(self.condicao(ex1, op, ex2, label))
-                self.desempilha()
-                
-
-                contador_de_abertura = 0
-                self.posso_escrever = True
+            elif self.lista_por_comandos[i][1] == '}':
+                self.lista.append("\n\tRET")
+                while len(self.lista) > 0:
+                    self.saida.write(self.elemento_lista())
+                #label = self.contador_labels
                 
 
             elif self.lista_por_comandos[i][1] == '=':
@@ -96,10 +79,10 @@ class GeradorCodigo():
                 while self.lista_por_comandos[i][1] != ';':
                     expressao = self.lista_por_comandos[i][1]
                     i += 1
-                if self.vazia():
+                if not len(self.lista) > 0:
                     self.saida.write(self.recebe(expressao, variavel))
                 else:
-                    self.empilha(self.recebe(expressao, variavel))
+                    self.lista.append(self.recebe(expressao, variavel))
             
             elif self.lista_por_comandos[i][1] == 'se':
                 i += 2
@@ -110,24 +93,16 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-                if self.vazia():
-                    self.saida.write(self.condicao(ex1, op, ex2, label))
-                    #self.saida.write("\n\tJMP label_" + str(label))
+                if (label + 2) % 2 == 0:
+                    self.lista.append(self.condicao(ex1, op, ex2, label+2))
                 else:
-                    self.empilha("\n\nlabel_" + str(jump) + ":")
-                    self.empilha(self.condicao(ex1, op, ex2, label))
-                    #self.empilha("\n\tJMP label_" + str(label))
-                    self.posso_escrever = False
-                #self.posso_escrever = True
+                    self.lista.append(self.condicao(ex1, op, ex2, label+3))
 
             elif self.lista_por_comandos[i][1] == 'senao':
-                if self.vazia():
-                    self.saida.write('\n\nlabel_' + str(jump) + ':')
-                else:
-                    self.empilha("\n\nlabel_" + str(jump) + ":")
+                self.lista.append("\n\nlabel_" + str(self.contador_labels+2) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
-                self.saida.write('\n\nlabel_' + str(jump) + ':')
+                self.saida.write('\n\nlabel_' + str(label) + ':')
                 i += 2
                 ex1 = ""
                 ex2 = ""
@@ -179,13 +154,13 @@ class GeradorCodigo():
     
     def condicao(self, ex1, op, ex2, n):
         string = self.comparacao(ex1, ex2)
-        if op == '>':
-            string += self.maior_que(n)
         if op == '<':
+            string += self.maior_que(n)
+        if op == '>':
             string += self.menor_que(n)
-        if op == '==':
+        if op == '!=':#jne
             string += self.igual(n)
-        if op == '!=':
+        if op == '==':#je
             string += self.diferente(n)
 
         return string

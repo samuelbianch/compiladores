@@ -19,6 +19,6 @@ class AnalisadorSemantico():
             i += 1
 
     def analisa(self):
-        with open('../out/saida_lexico.txt', 'r') as arquivo:
+        with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.divisao_por_zero(lista)
