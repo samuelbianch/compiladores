@@ -76,10 +76,15 @@ class GeradorCodigo():
                 self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
                 self.saida.write("\n\nlabel_" + str(label) + ":")
 
-            elif self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+            elif self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';' and self.lista_por_comandos[i+1][1] == 'senao':
                 jump += 1
                 #self.empilha("\n\tRET")
+                if condicao_enquanto:
+                    self.desempilha()
+                    self.saida.write(self.condicao(ex1, op, ex2, label))
                 self.desempilha()
+                
+
                 contador_de_abertura = 0
                 self.posso_escrever = True
                 
@@ -90,6 +95,7 @@ class GeradorCodigo():
                 expressao = 0
                 while self.lista_por_comandos[i][1] != ';':
                     expressao = self.lista_por_comandos[i][1]
+                    i += 1
                 if self.vazia():
                     self.saida.write(self.recebe(expressao, variavel))
                 else:
@@ -107,13 +113,30 @@ class GeradorCodigo():
                 if self.vazia():
                     self.saida.write(self.condicao(ex1, op, ex2, label))
                     #self.saida.write("\n\tJMP label_" + str(label))
-                             
                 else:
                     self.empilha("\n\nlabel_" + str(jump) + ":")
                     self.empilha(self.condicao(ex1, op, ex2, label))
                     #self.empilha("\n\tJMP label_" + str(label))
                     self.posso_escrever = False
                 #self.posso_escrever = True
+
+            elif self.lista_por_comandos[i][1] == 'senao':
+                if self.vazia():
+                    self.saida.write('\n\nlabel_' + str(jump) + ':')
+                else:
+                    self.empilha("\n\nlabel_" + str(jump) + ":")
+
+            elif self.lista_por_comandos[i][1] == 'enquanto':
+                self.saida.write('\n\nlabel_' + str(jump) + ':')
+                i += 2
+                ex1 = ""
+                ex2 = ""
+                ex1 += self.lista_por_comandos[i][1]
+                i += 1
+                op = self.lista_por_comandos[i][1]
+                i += 1
+                ex2 += self.lista_por_comandos[i][1]
+                condicao_enquanto = [ex1, op, ex2]
             
             print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
@@ -179,3 +202,22 @@ class GeradorCodigo():
         if expressao in self.lista_variaveis:
             expressao = "[" + expressao + "]"
         return "\n\n\tMOV eax, " + expressao + "\n\tMOV [" + variavel + "], eax"
+    
+    def mov_registradores(self, a, b):
+        if a in self.lista_variaveis:
+            a = "[" + a + "]"
+        if b in self.lista_variaveis:
+            b = "[" + b + "]"
+        return "\n\n\tMOV ebx, " + a + "\n\tMOV ecx, " + b
+    
+    def soma(self):
+        return "\n\tADD ebx, ecx"
+    
+    def sub(self):
+        return "\n\tSUB ebx, ecx"
+    
+    def div(self):
+        return "\n\tDIV ebx, ecx"
+    
+    def mult(self):
+        return "\n\tMUT ebx, ecx"
