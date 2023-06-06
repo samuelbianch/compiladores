@@ -14,8 +14,11 @@ se (aux1 < c) {
 }; se (aux3 < a) {
     resposta = 0;
 };
-se (resposta == 1) {
-    se (a == b) {       
+
+se (resposta == 0) {
+    escreva -> "NaoEhTriangulo";
+} senao {
+    se (a == b) {
         se (b == c) {
             escreva -> "Equilatero";
         };
@@ -31,9 +34,5 @@ se (resposta == 1) {
             se (a != c) {
                 escreva -> "Escaleno";
             };
-        } senao {
-            escreva -> "ERRO";
-        };
-} senao {
-    escreva -> "NaoEhTriangulo";
+        }; 
 };

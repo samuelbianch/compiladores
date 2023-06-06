@@ -1,11 +1,10 @@
 section .data ; declara constantes
 	in_out DB "%d", 0x0
-	string0: DB 'Equilatero', 10, 0
-	string1: DB 'Isoceles', 10, 0
+	string0: DB 'NaoEhTriangulo', 10, 0
+	string1: DB 'Equilatero', 10, 0
 	string2: DB 'Isoceles', 10, 0
-	string3: DB 'Escaleno', 10, 0
-	string4: DB 'ERRO', 10, 0
-	string5: DB 'NaoEhTriangulo', 10, 0
+	string3: DB 'Isoceles', 10, 0
+	string4: DB 'Escaleno', 10, 0
 
 
 section .bss ; declara as variaveis
@@ -79,78 +78,68 @@ label_4:
 
 label_7:
 	MOV ebx, [resposta] ; inicia uma comparacao 
-	MOV ecx, 1 
+	MOV ecx, 0 
 	CMP ebx, ecx 
-	JNE label_12
-	MOV ebx, [a] ; inicia uma comparacao 
-	MOV ecx, [b] 
-	CMP ebx, ecx 
-	JNE label_12
-	MOV ebx, [b] ; inicia uma comparacao 
-	MOV ecx, [c] 
-	CMP ebx, ecx 
-	JNE label_12
+	JNE label_13
 
 	PUSH string0; escrevendo string em tela
 	CALL printf
 	RET
 
-label_12:
+label_9:
 	MOV ebx, [a] ; inicia uma comparacao 
 	MOV ecx, [b] 
 	CMP ebx, ecx 
-	JNE label_18
+	JNE label_13
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JE label_18
+	JNE label_13
 
 	PUSH string1; escrevendo string em tela
 	CALL printf
 	RET
 
-label_18:
+label_13:
+	MOV ebx, [a] ; inicia uma comparacao 
+	MOV ecx, [b] 
+	CMP ebx, ecx 
+	JNE label_22
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JNE label_23
-	MOV ebx, [b] ; inicia uma comparacao 
-	MOV ecx, [a] 
-	CMP ebx, ecx 
-	JE label_23
+	JE label_22
 
 	PUSH string2; escrevendo string em tela
 	CALL printf
 	RET
 
-label_23:
-	MOV ebx, [a] ; inicia uma comparacao 
-	MOV ecx, [b] 
-	CMP ebx, ecx 
-	JE label_28
-	MOV ebx, [a] ; inicia uma comparacao 
+label_22:
+	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JE label_28
+	JNE label_27
+	MOV ebx, [b] ; inicia uma comparacao 
+	MOV ecx, [a] 
+	CMP ebx, ecx 
+	JE label_27
 
 	PUSH string3; escrevendo string em tela
 	CALL printf
 	RET
 
-label_28:
-
-label_30:
+label_27:
+	MOV ebx, [a] ; inicia uma comparacao 
+	MOV ecx, [b] 
+	CMP ebx, ecx 
+	JE label_32
+	MOV ebx, [a] ; inicia uma comparacao 
+	MOV ecx, [c] 
+	CMP ebx, ecx 
+	JE label_32
 
 	PUSH string4; escrevendo string em tela
 	CALL printf
 	RET
 
 label_32:
-
-label_33:
-
-	PUSH string5; escrevendo string em tela
-	CALL printf
-	RET
-
-label_35:

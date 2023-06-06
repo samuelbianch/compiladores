@@ -89,6 +89,7 @@ class GeradorCodigo():
 
             elif self.lista_por_comandos[i][1] == '{':
                 label = self.cont_labels()
+                posso_terminar = False
 
             elif self.lista_por_comandos[i][1] == '=':
                 variavel = self.lista_por_comandos[i-1][1]
@@ -119,6 +120,7 @@ class GeradorCodigo():
                     self.lista.append(self.condicao(ex1, op, ex2, label+contador+1))
 
             elif self.lista_por_comandos[i][1] == 'senao':
+                self.lista.append("\n\tRET")
                 self.lista.append("\n\nlabel_" + str(self.contador_labels) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
@@ -242,4 +244,4 @@ class GeradorCodigo():
         return "\n\tDIV ebx, ecx"
     
     def mult(self):
-        return "\n\tMUT ebx, ecx"
+        return "\n\tMUL ebx, ecx"
