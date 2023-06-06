@@ -27,6 +27,22 @@ class GeradorCodigo():
             self.lista.remove(aux)
             return aux
         
+    def recebe_label(self):
+        i = 0
+        label = self.cont_labels()
+        
+        while i < len(self.lista):
+            j = 0
+            aux = self.lista[i].split()
+            for c in aux:
+                if aux[j].isupper():
+                    aux[j] = '\n\t' + aux[j]
+                if c == 'label_':
+                    x = ' '.join(aux)
+                    self.lista[i] = x + str(label)
+                j += 1
+            i += 1
+
     def cont_labels(self):
         self.contador_labels += 1
         return self.contador_labels
@@ -48,7 +64,16 @@ class GeradorCodigo():
         contador = 0
         while i < len(self.lista_por_comandos):
             
-            if self.lista_por_comandos[i][1] == 'leia':
+            if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+                if self.lista:
+                    self.lista.append("\n\tRET")
+                while len(self.lista) > 0:
+                    self.recebe_label()
+                    self.saida.write(self.elemento_lista())
+                    if len(self.lista) == 0:
+                        self.saida.write("\n\nlabel_" + str(label+1) + ":")
+
+            elif self.lista_por_comandos[i][1] == 'leia':
                 if not len(self.lista) > 0:
                     self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
                 else:
@@ -63,28 +88,32 @@ class GeradorCodigo():
             elif self.lista_por_comandos[i][1] == '{':
                 label = self.cont_labels()
                 #self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
-                self.saida.write("\n\nlabel_" + str(label) + ":")
+                #self.saida.write("\n\nlabel_" + str(label) + ":")
 
-            elif self.lista_por_comandos[i][1] == '}':
-                self.lista.append("\n\tRET")
-                while len(self.lista) > 0:
-                    self.saida.write(self.elemento_lista())
-                #label = self.contador_labels
+            #elif self.lista_por_comandos[i][1] == '}':
+            #    while len(self.lista) > 0:
+            #        self.recebe_label()
+            #        self.saida.write(self.elemento_lista())
+            #        if len(self.lista) == 0:
+            #            self.saida.write("\n\nlabel_" + str(label+1) + ":")
                 
+                #label = self.contador_labels
 
             elif self.lista_por_comandos[i][1] == '=':
                 variavel = self.lista_por_comandos[i-1][1]
                 i += 1
-                expressao = 0
+                expressao = ""
                 while self.lista_por_comandos[i][1] != ';':
-                    expressao = self.lista_por_comandos[i][1]
+                    expressao += self.lista_por_comandos[i][1]
                     i += 1
+                expressao = expressao.strip()
                 if not len(self.lista) > 0:
                     self.saida.write(self.recebe(expressao, variavel))
                 else:
                     self.lista.append(self.recebe(expressao, variavel))
             
             elif self.lista_por_comandos[i][1] == 'se':
+                contador += 1
                 i += 2
                 ex1 = ""
                 ex2 = ""
@@ -94,12 +123,12 @@ class GeradorCodigo():
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
                 if (label + 2) % 2 == 0:
-                    self.lista.append(self.condicao(ex1, op, ex2, label+2))
+                    self.lista.append(self.condicao(ex1, op, ex2, label+contador))
                 else:
-                    self.lista.append(self.condicao(ex1, op, ex2, label+3))
+                    self.lista.append(self.condicao(ex1, op, ex2, label+contador+1))
 
             elif self.lista_por_comandos[i][1] == 'senao':
-                self.lista.append("\n\nlabel_" + str(self.contador_labels+2) + ":")
+                self.lista.append("\n\nlabel_" + str(self.contador_labels) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
                 self.saida.write('\n\nlabel_' + str(label) + ':')
@@ -112,9 +141,11 @@ class GeradorCodigo():
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
                 condicao_enquanto = [ex1, op, ex2]
+
             
             print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
+        print("Expressoes: ", self.lista_expressoes)
             
             
     def incrementa_string(self):
@@ -130,16 +161,16 @@ class GeradorCodigo():
         return string + "\n\tCMP ebx, ecx"
     
     def menor_que(self, n):
-        return "\n\tJL label_" + str(n) 
+        return "\n\tJL label_"
     
     def igual(self, n):
-        return "\n\tJE label_" + str(n)
+        return "\n\tJE label_"
 
     def diferente(self, n):
-        return "\n\tJNE label_" + str(n)
+        return "\n\tJNE label_"
     
     def maior_que(self, n):
-        return "\n\tJG label_" + str(n)
+        return "\n\tJG label_"
     
     def pular_para(self, entrada):
         return "\n\tJMP label_" + entrada
@@ -174,9 +205,31 @@ class GeradorCodigo():
         
 
     def recebe(self, expressao, variavel):
-        if expressao in self.lista_variaveis:
-            expressao = "[" + expressao + "]"
-        return "\n\n\tMOV eax, " + expressao + "\n\tMOV [" + variavel + "], eax"
+        expressao_posfixa = GeradorIntermediario.infixToPostfix(expressao)
+        print(expressao_posfixa)
+        string = ""
+        operadores = ['+', '-', '*', '/']
+        i = 0
+        while i < len(expressao_posfixa):
+            if expressao_posfixa[i] not in operadores:
+                string += "\n\n\tMOV ebx, " + expressao_posfixa[i]
+                i += 1
+            if expressao_posfixa[i] not in operadores:
+                string += "\n\tMOV ecx, " + expressao_posfixa[i]
+                i += 1
+            if expressao_posfixa[i] in operadores:
+                if expressao_posfixa[i] == '+':
+                    string += self.soma()
+                if expressao_posfixa[i] == '-':
+                    string += self.sub()
+                if expressao_posfixa[i] == '/':
+                    string += self.div()
+                if expressao_posfixa[i] == '*':
+                    string += self.mult()
+                
+            i += 1
+                
+        return string + "\n\tMOV [" + variavel + "], ebx"
     
     def mov_registradores(self, a, b):
         if a in self.lista_variaveis:
