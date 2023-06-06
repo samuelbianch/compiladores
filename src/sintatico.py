@@ -493,11 +493,15 @@ class AnalisadorSintatico:
                     print("ERRO! Esperava-se a palavra enquanto, mas foi encontrado: ", end="")
                     print(self.lista_tokens[0])
                     exit(0)
+
+            else:
+                print("EROO! inesperado")
+                exit(0)
             i += 1
 
-            #if self.lista_tokens:
-                #print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
-                #print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
+            if self.lista_tokens:
+                print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
+                print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
 
 
 # print(arquivo.readline())

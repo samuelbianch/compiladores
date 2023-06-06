@@ -8,7 +8,7 @@ from gerador_codigo import GeradorCodigo
 
 #if sys.argv[1]:
 try:
-    with open("D:\Programação\compiladores\\tests\problema1.txt", "r") as arquivo:
+    with open("D:\Programação\compiladores\\tests\problem1.txt", "r") as arquivo:
         print("Arquivo lido")
         analisador_lexico = AnalisadorLexico()
         analisador_lexico.analisa(arquivo)

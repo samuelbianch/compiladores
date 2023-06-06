@@ -1,0 +1,39 @@
+leia -> a;
+leia -> b;
+leia -> c;
+
+aux1 = a + b;
+aux2 = a + c;
+aux3 = b + c;
+resposta = 1;
+
+se (aux1 < c) {
+    resposta = 0;
+}; se (aux2 < b) {
+    resposta = 0;
+}; se (aux3 < a) {
+    resposta = 0;
+};
+se (resposta == 1) {
+    se (a == b) {       
+        se (b == c) {
+            escreva -> "Equilatero";
+        };
+    }; se (a == b) {
+        se (b != c) {
+            escreva -> "Isoceles";
+        };
+    }; se (b == c) {
+        se (b != a) {
+            escreva -> "Isoceles";
+        };
+    }; se (a != b) {
+            se (a != c) {
+                escreva -> "Escaleno";
+            };
+        } senao {
+            escreva -> "ERRO";
+        };
+} senao {
+    escreva -> "NaoEhTriangulo";
+};

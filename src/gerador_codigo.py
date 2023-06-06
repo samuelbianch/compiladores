@@ -59,19 +59,19 @@ class GeradorCodigo():
         i = 0
         self.posso_escrever = True
         label = 0
-        jump = 0
-        contador_de_abertura = 0
+        posso_terminar = False
         contador = 0
         while i < len(self.lista_por_comandos):
             
             if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
-                if self.lista:
-                    self.lista.append("\n\tRET")
                 while len(self.lista) > 0:
                     self.recebe_label()
                     self.saida.write(self.elemento_lista())
                     if len(self.lista) == 0:
+                        if posso_terminar:
+                            self.saida.write("\n\tRET")
                         self.saida.write("\n\nlabel_" + str(label+1) + ":")
+                
 
             elif self.lista_por_comandos[i][1] == 'leia':
                 if not len(self.lista) > 0:
@@ -85,19 +85,10 @@ class GeradorCodigo():
                 else:
                     self.lista.append(self.escreva_string())
 
+                posso_terminar = True
+
             elif self.lista_por_comandos[i][1] == '{':
                 label = self.cont_labels()
-                #self.saida.write("\n\tJMP label_" + str(label+contador_de_abertura))
-                #self.saida.write("\n\nlabel_" + str(label) + ":")
-
-            #elif self.lista_por_comandos[i][1] == '}':
-            #    while len(self.lista) > 0:
-            #        self.recebe_label()
-            #        self.saida.write(self.elemento_lista())
-            #        if len(self.lista) == 0:
-            #            self.saida.write("\n\nlabel_" + str(label+1) + ":")
-                
-                #label = self.contador_labels
 
             elif self.lista_por_comandos[i][1] == '=':
                 variavel = self.lista_por_comandos[i-1][1]
@@ -157,7 +148,7 @@ class GeradorCodigo():
             entrada1 = '[' + entrada1 + ']'
         if entrada2 in self.lista_variaveis:
             entrada2 = '[' + entrada2 + ']'
-        string = "\n\n\tMOV ebx, " + entrada1 + "\n\tMOV ecx, " + entrada2
+        string = "\n\n\tMOV ebx, " + entrada1 + " ; inicia uma comparacao\n\tMOV ecx, " + entrada2
         return string + "\n\tCMP ebx, ecx"
     
     def menor_que(self, n):
@@ -210,26 +201,29 @@ class GeradorCodigo():
         string = ""
         operadores = ['+', '-', '*', '/']
         i = 0
-        while i < len(expressao_posfixa):
-            if expressao_posfixa[i] not in operadores:
-                string += "\n\n\tMOV ebx, " + expressao_posfixa[i]
-                i += 1
-            if expressao_posfixa[i] not in operadores:
-                string += "\n\tMOV ecx, " + expressao_posfixa[i]
-                i += 1
-            if expressao_posfixa[i] in operadores:
-                if expressao_posfixa[i] == '+':
-                    string += self.soma()
-                if expressao_posfixa[i] == '-':
-                    string += self.sub()
-                if expressao_posfixa[i] == '/':
-                    string += self.div()
-                if expressao_posfixa[i] == '*':
-                    string += self.mult()
-                
-            i += 1
-                
-        return string + "\n\tMOV [" + variavel + "], ebx"
+        for c in expressao_posfixa:
+            if c in operadores:
+                while i < len(expressao_posfixa):
+                    if expressao_posfixa[i] not in operadores:
+                        string += "\n\n\tMOV ebx, [" + expressao_posfixa[i] + "] ; iniciando uma operacao aritmetica"
+                        i += 1
+                    if expressao_posfixa[i] not in operadores:
+                        string += "\n\tMOV ecx, [" + expressao_posfixa[i] + "]"
+                        i += 1
+                    if expressao_posfixa[i] in operadores:
+                        if expressao_posfixa[i] == '+':
+                            string += self.soma()
+                        if expressao_posfixa[i] == '-':
+                            string += self.sub()
+                        if expressao_posfixa[i] == '/':
+                            string += self.div()
+                        if expressao_posfixa[i] == '*':
+                            string += self.mult()
+                        
+                    i += 1
+        if expressao_posfixa.isnumeric():
+            return "\n\tMOV eax, " + str(expressao_posfixa) + "; recebendo um numero inteiro\n\tMOV [" + variavel + "], eax" 
+        return string + "\n\tMOV [" + variavel + "], ebx ; recebe um valor apos a operacao"
     
     def mov_registradores(self, a, b):
         if a in self.lista_variaveis:
