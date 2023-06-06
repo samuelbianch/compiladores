@@ -96,7 +96,7 @@ class GeradorCodigo():
                 i += 1
                 expressao = ""
                 while self.lista_por_comandos[i][1] != ';':
-                    expressao += self.lista_por_comandos[i][1]
+                    expressao += " " + self.lista_por_comandos[i][1]
                     i += 1
                 expressao = expressao.strip()
                 if not len(self.lista) > 0:
@@ -223,6 +223,8 @@ class GeradorCodigo():
                     i += 1
         if expressao_posfixa.isnumeric():
             return "\n\tMOV eax, " + str(expressao_posfixa) + "; recebendo um numero inteiro\n\tMOV [" + variavel + "], eax" 
+        else:
+            string += "\n\tMOV ebx, [" + str(expressao_posfixa) + "]"
         return string + "\n\tMOV [" + variavel + "], ebx ; recebe um valor apos a operacao"
     
     def mov_registradores(self, a, b):

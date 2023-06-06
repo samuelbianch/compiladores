@@ -11,7 +11,6 @@ se (linhas_total > 1){
     fatorial_n = 1;
     fatorial_p = 1;
     fatorial_x = 1;
-    x = linha_atual + 1 / 55 * 6;
     enquanto (coluna_atual < x) {
         fatorial_n = 1;
         fatorial_p = 1;
