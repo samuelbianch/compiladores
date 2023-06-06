@@ -4,7 +4,8 @@ section .data ; declara constantes
 	string1: DB 'Equilatero', 10, 0
 	string2: DB 'Isoceles', 10, 0
 	string3: DB 'Isoceles', 10, 0
-	string4: DB 'Escaleno', 10, 0
+	string4: DB 'Isoceles', 10, 0
+	string5: DB 'Escaleno', 10, 0
 
 
 section .bss ; declara as variaveis
@@ -80,66 +81,82 @@ label_7:
 	MOV ebx, [resposta] ; inicia uma comparacao 
 	MOV ecx, 0 
 	CMP ebx, ecx 
-	JNE label_13
+	JNE label_10
 
 	PUSH string0; escrevendo string em tela
 	CALL printf
 	RET
 
-label_9:
+label_10:
+
+label_11:
 	MOV ebx, [a] ; inicia uma comparacao 
 	MOV ecx, [b] 
 	CMP ebx, ecx 
-	JNE label_13
+	JNE label_15
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JNE label_13
+	JNE label_15
 
 	PUSH string1; escrevendo string em tela
 	CALL printf
 	RET
 
-label_13:
+label_15:
 	MOV ebx, [a] ; inicia uma comparacao 
 	MOV ecx, [b] 
 	CMP ebx, ecx 
-	JNE label_22
+	JNE label_21
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JE label_22
+	JE label_21
 
 	PUSH string2; escrevendo string em tela
 	CALL printf
 	RET
 
-label_22:
+label_21:
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JNE label_27
+	JNE label_26
 	MOV ebx, [b] ; inicia uma comparacao 
 	MOV ecx, [a] 
 	CMP ebx, ecx 
-	JE label_27
+	JE label_26
 
 	PUSH string3; escrevendo string em tela
 	CALL printf
 	RET
 
-label_27:
-	MOV ebx, [a] ; inicia uma comparacao 
-	MOV ecx, [b] 
-	CMP ebx, ecx 
-	JE label_32
+label_26:
 	MOV ebx, [a] ; inicia uma comparacao 
 	MOV ecx, [c] 
 	CMP ebx, ecx 
-	JE label_32
+	JNE label_31
+	MOV ebx, [c] ; inicia uma comparacao 
+	MOV ecx, [b] 
+	CMP ebx, ecx 
+	JE label_31
 
 	PUSH string4; escrevendo string em tela
 	CALL printf
 	RET
 
-label_32:
+label_31:
+	MOV ebx, [a] ; inicia uma comparacao 
+	MOV ecx, [b] 
+	CMP ebx, ecx 
+	JE label_36
+	MOV ebx, [a] ; inicia uma comparacao 
+	MOV ecx, [c] 
+	CMP ebx, ecx 
+	JE label_36
+
+	PUSH string5; escrevendo string em tela
+	CALL printf
+	RET
+
+label_36:

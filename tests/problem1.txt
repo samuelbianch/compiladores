@@ -30,7 +30,12 @@ se (resposta == 0) {
         se (b != a) {
             escreva -> "Isoceles";
         };
-    }; se (a != b) {
+    }; se (a == c) {
+        se (c != b) {
+            escreva -> "Isoceles";
+        };
+    };
+     se (a != b) {
             se (a != c) {
                 escreva -> "Escaleno";
             };

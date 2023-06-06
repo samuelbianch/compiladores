@@ -63,7 +63,7 @@ class GeradorCodigo():
         contador = 0
         while i < len(self.lista_por_comandos):
             
-            if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+            if self.lista_por_comandos[i][1] == '}':
                 while len(self.lista) > 0:
                     self.recebe_label()
                     self.saida.write(self.elemento_lista())
@@ -120,7 +120,7 @@ class GeradorCodigo():
                     self.lista.append(self.condicao(ex1, op, ex2, label+contador+1))
 
             elif self.lista_por_comandos[i][1] == 'senao':
-                self.lista.append("\n\tRET")
+                #self.lista.append("\n\tRET")
                 self.lista.append("\n\nlabel_" + str(self.contador_labels) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
@@ -133,8 +133,6 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-                condicao_enquanto = [ex1, op, ex2]
-
             
             print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
