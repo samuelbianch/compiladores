@@ -1,8 +1,10 @@
 
 class AnalisadorSemantico():
 
-    def __init__(self):
-       pass
+    def __init__(self, debug):
+       self.debug = debug
+       if self.debug:
+            print("\n-------Analisando semanticamente o código-------")
 
     def divisao_por_zero(self, lista):
         i = 0
@@ -19,6 +21,6 @@ class AnalisadorSemantico():
             i += 1
 
     def analisa(self):
-        with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
+        with open('D:\Programação\\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.divisao_por_zero(lista)

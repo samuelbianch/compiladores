@@ -59,10 +59,14 @@ lista_variaveis_to_intermediario = []
 class AnalisadorLexico():
     """Classe que analisa o texto de entrada e separa os tokens da linguagem implementada"""
 
-    def __init__(self):
+    def __init__(self, debug):
         self.lista_tokens = []
         self.lista_temp = []
         self.lista_variaveis = []
+        self.debug = debug
+
+        if self.debug:
+            print("\n-------Analisando lexicamente o código-------")
 
     def __str__(self):
         return "Analisador Léxico"
@@ -207,13 +211,13 @@ class AnalisadorLexico():
 
         # Lendo a linha da entrada
         linha = arquivo.readline()
-
         linha_atual = 1
 
         while linha:
             i = 0
             tam_linha = len(linha)
-            # print(linha)
+            if self.debug:
+                print("Linha: ", linha)
             while i < tam_linha:
                 caracter_atual = linha[i]
                 # print("Caractere atual: ", caracter_atual)
@@ -294,7 +298,6 @@ class AnalisadorLexico():
                         self.lista_tokens.append(self.lista_temp)
                         arquivo_saida.write("tok12" + ',' + caracter_atual + ',' + str(linha_atual) + ',' + str(i+1) + '\n')
 
-                # TODO
                 # Verificando se é um numero   
                 if caracter_seguinte != None and self.is_numero(caracter_atual):
                     string = ""
@@ -333,10 +336,6 @@ class AnalisadorLexico():
                         i += 1
 
                     if self.is_palavra_reservada(temp):
-                        # print("entrei aqui")
-                        # print(temp)
-                        # print(linha_atual)
-                        # print(self.qual_palavra_reservada(temp))
                         self.lista_temp = []
                         self.lista_temp.append(temp)
                         self.lista_temp.append(linha_atual)

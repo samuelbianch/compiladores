@@ -40,11 +40,15 @@ from typing import List
 
 class AnalisadorSintatico:
 
-    def __init__(self, lista_tokens):
+    def __init__(self, lista_tokens, debug):
         self.lista_tokens = lista_tokens
         self.pilha_comandos: List[str] = []
         self.pilha_comandos.append('$')
         self.pilha_comandos.append('<PROGRAM>')
+        self.debug = debug
+
+        if self.debug:
+            print("\n-------Analisando sintaticamente o código-------")
 
     def empilha(self, elemento):
         self.pilha_comandos.append(elemento)
@@ -234,18 +238,16 @@ class AnalisadorSintatico:
 
     def analisa(self):
         """Analisador Sintatico"""
-        print("Lista de tokens", self.lista_tokens)
+        #print("Lista de tokens", self.lista_tokens)
         tamanho = len(self.lista_tokens)
         i = 1
 
         # Cria o arquivo de saída
-        saida = open('D:\Programação\compiladores\out\saida_sintatico.txt', 'w')
+        saida = open('D:\Programação\\compiladores\out\saida_sintatico.txt', 'w')
         #print("Topo da pilha: " + self.peek())
         while len(self.lista_tokens) > 0:
-
-            #print("Ultimo elemento: " + str(self.pilha_lexico[0]))
             saida.write(str(self.pilha_comandos) + "\n")
-            #print("ENTREI AQUI")
+
             if self.peek() == self.lista_tokens[0][0]:
                 self.desempilha()
                 del self.lista_tokens[0]
@@ -499,9 +501,10 @@ class AnalisadorSintatico:
                 exit(0)
             i += 1
 
-            if self.lista_tokens:
-                print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
-                print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
+            if self.debug:
+                if self.lista_tokens:
+                    print("Laço: "+ str(i) + " Pilha: " + str(self.pilha_comandos))
+                    print("Laço: " + str(i) + " Lista: " + str(self.lista_tokens[0][0]))
 
 
 # print(arquivo.readline())

@@ -3,16 +3,20 @@ from typing import List
 
 class GeradorIntermediario():
 
-    def __init__(self, lista_variaveis):
+    def __init__(self, debug):
         self.lista_variaveis = []
         self.lista_expressoes_pos_fixa = []
         self.lista_expressoes = []
         self.lista_strings = []
+        self.debug = debug
+
+        if self.debug:
+            print("\n-------Gerando código Intermediário-------")
 
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         self.remove_repetidos()
         self.pilha: List[str] = []
-        with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
+        with open('D:\Programação\\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.get_lista_expressoes(lista)
             self.lista_string__ = self.get_string(lista)
@@ -54,7 +58,6 @@ class GeradorIntermediario():
         expressao = ""
         while i < len(lista):
             lista_temp = lista[i].split(',')
-            # print("Lista temp: ", lista_temp)
 
             # Ignora os caracteres após o simbolo do leia
             if lista_temp[1] == '->':
@@ -91,8 +94,9 @@ class GeradorIntermediario():
 
             i += 1 
 
-        print("Expressao: ", self.lista_expressoes)
-        print("Tamanho Expressao: ", len(self.lista_expressoes))
+        if self.debug:
+            print("Expressao: ", self.lista_expressoes)
+            print("Tamanho Expressao: ", len(self.lista_expressoes))
 
         return self.lista_expressoes
     
@@ -116,75 +120,6 @@ class GeradorIntermediario():
             i += 1
 
         return string
-    
-    def expressao_pos_fixa(self):
-        expressao = None
-        i = 0
-        while i < len(self.lista_expressoes):
-            expressao
-            self.lista_expressoes_pos_fixa[i] = expressao
-            i += 1
-
-        return expressao
-
-    def isOperador(self, s):
-        if s == "+" or s == "-" or s == "*" or s == "/" or s == "$":
-            return True
-        else:
-            return False
-
-    def prioridade(self, c, t):
-        """Verifica a prioridade entre os operandos"""
-        if c == '$':
-            pc = 4
-        elif c == '*' or c == '/':
-            pc = 2
-        elif c == '+' or c == '-':
-            pc = 1
-        else:
-            pc = 4
-    
-        if t == '$':
-            pt = 3
-        elif t == '*' or t == '/':
-            pt = 2
-        elif t == '+' or t == '-':
-            pt = 1
-        else:
-            pt = 0
-
-        return pc <= pt
-
-    def postfix(self):
-        """Converte uma expressao infixa em posfixa"""
-
-        for i in range(len(self.lista_expressoes[28])):
-            c = self.lista_expressoes[i]
-            if c >= '0' and c <= '9' or c.lower() >= 'a' and c.lower() <= 'z':
-                self.empilha(c)
-            elif self.isOperador(c):
-                while not len(self.pilha) < 0 and self.prioridade(c, self.pilha.stacktop()):
-                    t = self.desempilha()
-                    self.empilha(t)
-                self.pilha.push(c)
-            elif c == '(':
-                self.pilha.push(c)
-            elif c == ')':
-                while True:
-                    t = self.desempilha()
-                    if t != '(':
-                        self.empilha(t)
-                    else:
-                        break
-        while not len(self.pilha) > 0:
-            self.empilha(self.desempilha())
-
-        self.pilha = "".join(self.pilha)
-
-        self.lista_expressoes_pos_fixa = self.pilha
-        print("Lista pos fixa: " + self.lista_expressoes_pos_fixa)
-
-    
     
     def infixToPostfix(expression): 
     # Code by: https://favtutor.com/blogs/infix-to-postfix-conversion
