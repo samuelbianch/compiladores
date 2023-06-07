@@ -5,7 +5,7 @@ from typing import List
 class GeradorCodigo():
     
     def __init__(self, intermediario, lista_expressoes, lista_strings):
-        self.saida = open('D:\Programação\compiladores\\assembly\saida_assembly.asm', 'w')
+        self.saida = open('D:\\apps\compiladores\\assembly\saida_assembly.asm', 'w')
         self.intermediario = intermediario
         self.cont_string = -1
         self.contador_labels = -1
@@ -18,7 +18,7 @@ class GeradorCodigo():
         self.guarda_label_enquanto = 0
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         #print("Aqui fio: ", lista_expressoes)
-        with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
+        with open('D:\\apps\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
             arquivo.close()
 
@@ -30,7 +30,7 @@ class GeradorCodigo():
         
     def recebe_label(self):
         i = 0
-        label = self.cont_labels()
+        #label = self.cont_labels()
         
         while i < len(self.lista):
             j = 0
@@ -40,7 +40,7 @@ class GeradorCodigo():
                     aux[j] = '\n\t' + aux[j]
                 if c == 'label_':
                     x = ' '.join(aux)
-                    self.lista[i] = x + str(label)
+                    self.lista[i] = x + str(self.contador_labels+1)
                 j += 1
             i += 1
 
@@ -63,6 +63,7 @@ class GeradorCodigo():
         posso_terminar = False
         contador = 0
         self.guarda_label_enquanto = 0
+        enquanto = False
         while i < len(self.lista_por_comandos):
             
             #if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
@@ -70,13 +71,17 @@ class GeradorCodigo():
              #       self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
 
             if self.lista_por_comandos[i][1] == '}':
+                #self.lista.append("\n\tJMP label_" + str(self.guarda_label_enquanto))
                 while len(self.lista) > 0:
                     self.recebe_label()
                     self.saida.write(self.elemento_lista())
                     if len(self.lista) == 0:
-                        if posso_terminar:
+                        if posso_terminar and enquanto == False:
+                            self.saida.write("\n\tRET")
+                        if enquanto:
                             self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
-                        self.saida.write("\n\nlabel_" + str(label+1) + ":")
+                            enquanto = False
+                        #self.saida.write("\n\nlabel_" + str(label+1) + ":")
                 
             elif self.lista_por_comandos[i][1] == 'leia':
                 if not len(self.lista) > 0:
@@ -95,7 +100,8 @@ class GeradorCodigo():
 
             elif self.lista_por_comandos[i][1] == '{':
                 label = self.cont_labels()
-                posso_terminar = False
+                self.saida.write("\n\nlabel_" + str(self.contador_labels) +":")
+
 
             elif self.lista_por_comandos[i][1] == '=':
                 variavel = self.lista_por_comandos[i-1][1]
@@ -127,10 +133,11 @@ class GeradorCodigo():
 
             elif self.lista_por_comandos[i][1] == 'senao':
                 #self.lista.append("\n\tRET")
-                self.lista.append("\n\nlabel_" + str(self.contador_labels) + ":")
+                self.lista.append("\n\nlabel_" + str(self.cont_labels()) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
-                self.saida.write('\n\nlabel_' + str(label) + ':')
+                enquanto = True
+                #self.saida.write('\n\nlabel_' + str(self.contador_labels+1) + ":\n\t;enquanto")
                 self.guarda_label_enquanto = label
                 i += 2
                 ex1 = ""
@@ -140,25 +147,13 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-                if op == '==':
-                    op2 = '!='
-                elif op == '!=':
-                    op2 = '=='
-                elif op == '>':
-                    op2 = '<'
-                elif op == '<':
-                    op2 = '>'
 
-                if (label + 2) % 2 == 0:
-                    self.lista.append("\n\t; iniciando um enquanto\n")
-                    self.lista.append(self.condicao(ex1, op, ex2, label+contador))         
-                else:
-                    self.lista.append("\n\t; iniciando um enquanto\n")
-                    self.lista.append(self.condicao(ex1, op2, ex2, label+contador+1))
+                self.lista.append(self.condicao(ex1, op, ex2, label+contador))
+                
             
             print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
-        self.saida.write("\n\tRET")
+        self.saida.write("\n\nlabel_" + str(self.contador_labels+1) +":\n\tRET")
         print("Expressoes: ", self.lista_expressoes)
             
             
@@ -168,7 +163,7 @@ class GeradorCodigo():
 
     def comparacao(self, entrada1, entrada2):
         if entrada1 in self.lista_variaveis:
-            entrada1 = '[' + entrada1 + ']'
+            entrada1 = '[' + entrada1 + ']' 
         if entrada2 in self.lista_variaveis:
             entrada2 = '[' + entrada2 + ']'
         string = "\n\n\tMOV ebx, " + entrada1 + " ; inicia uma comparacao\n\tMOV ecx, " + entrada2
