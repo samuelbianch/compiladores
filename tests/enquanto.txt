@@ -3,5 +3,4 @@ i = 0;
 enquanto (i < a) {
     escreva -> "LOOP";
     i = i + 1;
-    
 };
