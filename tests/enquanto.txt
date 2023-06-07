@@ -1,0 +1,10 @@
+a = 4;
+i = 0;
+enquanto (i < a) {
+    escreva -> "LOOP";
+    enquanto (i < 2) {
+        escreva -> "EntreiNoOutroEnquanto";
+        i = i + 1;
+    };
+    i = i + 1;
+};

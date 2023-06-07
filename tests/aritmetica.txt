@@ -1,0 +1,4 @@
+ana = 5;
+bia = 6;
+x = 10 * bia;
+escreva -> x;

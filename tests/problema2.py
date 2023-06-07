@@ -21,20 +21,22 @@ if linhas_total >= 1:
             while (n > 0):
                 fatorial_n = fatorial_n * n
                 n = n - 1
+            
             # p!
             p = coluna_atual
             while (p > 0):
                 fatorial_p = fatorial_p * p
                 p = p - 1
+            
             # (n - p)!
             aux = linha_atual - coluna_atual
             while (aux > 0):
                 fatorial_x = fatorial_x * aux
                 aux = aux - 1
-            # print("Fatorial n: ", linha_atual, " = ", fatorial_n)
-            # print("Fatorial p: ", coluna_atual, " = ", fatorial_p)
-            # print("Fatorial x: ", linha_atual - coluna_atual, " = ", fatorial_x)
-            print(int((fatorial_n/(fatorial_p * fatorial_x))), end="")
+
+            denominador =  fatorial_p * fatorial_x
+            resultado = fatorial_n / denominador
+            print(int(resultado), end="")
             print(" ", end="")
             coluna_atual = coluna_atual + 1
             

@@ -38,7 +38,8 @@ class GeradorIntermediario():
         self.lista_variaveis = lista_aux
 
     def get_string(self, lista):
-        i = 0        
+        i = 0
+        ativo = False
         while i < len(lista):
             lista_temp = lista[i].split(',')
             #print(lista_temp)
@@ -191,7 +192,7 @@ class GeradorIntermediario():
         Priority = {'+':1, '-':1, '*':2, '/':2, '^':3} # dictionary having priorities of Operators
         stack = [] # initialization of empty stack
 
-        output = '' 
+        output = ''
 
         for character in expression:
 
@@ -221,7 +222,7 @@ class GeradorIntermediario():
 
         while stack:
 
-            output+=stack.pop()
+            output+= " " + stack.pop()
 
         return output
 

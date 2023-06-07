@@ -15,6 +15,7 @@ class GeradorCodigo():
         self.labels = ""
         self.posso_escrever = True
         self.lista = []
+        self.guarda_label_enquanto = 0
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         #print("Aqui fio: ", lista_expressoes)
         with open('D:\Programação\compiladores\out\saida_lexico.txt', 'r') as arquivo:
@@ -61,18 +62,22 @@ class GeradorCodigo():
         label = 0
         posso_terminar = False
         contador = 0
+        self.guarda_label_enquanto = 0
         while i < len(self.lista_por_comandos):
             
+            #if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+            #    if not self.lista:
+             #       self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
+
             if self.lista_por_comandos[i][1] == '}':
                 while len(self.lista) > 0:
                     self.recebe_label()
                     self.saida.write(self.elemento_lista())
                     if len(self.lista) == 0:
                         if posso_terminar:
-                            self.saida.write("\n\tRET")
+                            self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
                         self.saida.write("\n\nlabel_" + str(label+1) + ":")
                 
-
             elif self.lista_por_comandos[i][1] == 'leia':
                 if not len(self.lista) > 0:
                     self.saida.write(self.leia(self.lista_por_comandos[i+2][1]))
@@ -80,10 +85,11 @@ class GeradorCodigo():
                     self.lista.append(self.leia(self.lista_por_comandos[i+2][1]))
 
             elif self.lista_por_comandos[i][1] == 'escreva':
+                string = self.lista_por_comandos[i+2][1]
                 if not len(self.lista) > 0:
-                    self.saida.write(self.escreva_string())
+                    self.saida.write(self.escreva_string(string))
                 else:
-                    self.lista.append(self.escreva_string())
+                    self.lista.append(self.escreva_string(string))
 
                 posso_terminar = True
 
@@ -125,6 +131,7 @@ class GeradorCodigo():
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
                 self.saida.write('\n\nlabel_' + str(label) + ':')
+                self.guarda_label_enquanto = label
                 i += 2
                 ex1 = ""
                 ex2 = ""
@@ -133,9 +140,25 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
+                if op == '==':
+                    op2 = '!='
+                elif op == '!=':
+                    op2 = '=='
+                elif op == '>':
+                    op2 = '<'
+                elif op == '<':
+                    op2 = '>'
+
+                if (label + 2) % 2 == 0:
+                    self.lista.append("\n\t; iniciando um enquanto\n")
+                    self.lista.append(self.condicao(ex1, op, ex2, label+contador))         
+                else:
+                    self.lista.append("\n\t; iniciando um enquanto\n")
+                    self.lista.append(self.condicao(ex1, op2, ex2, label+contador+1))
             
             print("lista por comando: ", self.lista_por_comandos[i][1])
             i += 1
+        self.saida.write("\n\tRET")
         print("Expressoes: ", self.lista_expressoes)
             
             
@@ -191,41 +214,46 @@ class GeradorCodigo():
         return "\n\n\tPUSH " + entrada +"; lendo uma entrada\n\tPUSH in_out\n\tCALL scanf"
         
 
-    def escreva_string(self):
-        return "\n\n\tPUSH string" + str(self.incrementa_string()) + "; escrevendo string em tela\n\tCALL printf"
-        
+    def escreva_string(self, string):
+        if string not in self.lista_variaveis:    
+            return "\n\n\tPUSH string" + str(self.incrementa_string()) + "; escrevendo string em tela\n\tCALL printf"
+        else:
+            return"\n\n\tMOV eax, [" + string + "]\n\tPUSH eax \n\tPUSH in_out; escrevendo string em tela\n\tCALL printf"
 
     def recebe(self, expressao, variavel):
         expressao_posfixa = GeradorIntermediario.infixToPostfix(expressao)
-        print(expressao_posfixa)
+        print("Expressao posfixa", expressao_posfixa.split())
+        
         string = ""
-        operadores = ['+', '-', '*', '/']
         i = 0
+        expressao_posfixa = expressao_posfixa.split()
+
+        if len(expressao_posfixa) == 1:
+            if expressao_posfixa[0].isnumeric():
+                return "\n\tMOV eax, " + str(expressao_posfixa[0]) + "; recebendo um numero inteiro\n\tMOV [" + variavel + "], eax" 
+        Priority = {'+':1, '-':1, '*':2, '/':2, '^':3}
+        pilha = []
+
         for c in expressao_posfixa:
-            if c in operadores:
-                while i < len(expressao_posfixa):
-                    if expressao_posfixa[i] not in operadores:
-                        string += "\n\n\tMOV ebx, [" + expressao_posfixa[i] + "] ; iniciando uma operacao aritmetica"
-                        i += 1
-                    if expressao_posfixa[i] not in operadores:
-                        string += "\n\tMOV ecx, [" + expressao_posfixa[i] + "]"
-                        i += 1
-                    if expressao_posfixa[i] in operadores:
-                        if expressao_posfixa[i] == '+':
-                            string += self.soma()
-                        if expressao_posfixa[i] == '-':
-                            string += self.sub()
-                        if expressao_posfixa[i] == '/':
-                            string += self.div()
-                        if expressao_posfixa[i] == '*':
-                            string += self.mult()
-                        
-                    i += 1
-        if expressao_posfixa.isnumeric():
-            return "\n\tMOV eax, " + str(expressao_posfixa) + "; recebendo um numero inteiro\n\tMOV [" + variavel + "], eax" 
-        else:
-            string += "\n\tMOV ebx, [" + str(expressao_posfixa) + "]"
-        return string + "\n\tMOV [" + variavel + "], ebx ; recebe um valor apos a operacao"
+            if c not in Priority:
+                pilha.append(c)
+            else:
+                val1 = pilha.pop()
+                val2 = pilha.pop()
+                if val1 in self.lista_variaveis:
+                    val1 = "[" + val1 + "]"
+                if val2 in self.lista_variaveis:
+                    val2 = "[" + val2 + "]" 
+                string += "\n\tMOV eax, " + val1 + "\n\tMOV ebx, " + val2
+                if c == '+':
+                    string += self.soma()
+                elif c == '-':
+                    string += self.sub()
+                elif c == '/':
+                    string += self.div()
+                elif c == '*':
+                    string += self.mult()
+        return string + "\n\tMOV [" + variavel + "], eax"
     
     def mov_registradores(self, a, b):
         if a in self.lista_variaveis:
@@ -235,13 +263,13 @@ class GeradorCodigo():
         return "\n\n\tMOV ebx, " + a + "\n\tMOV ecx, " + b
     
     def soma(self):
-        return "\n\tADD ebx, ecx"
+        return "\n\tADD eax, ebx ; somando dois inteiros"
     
     def sub(self):
-        return "\n\tSUB ebx, ecx"
+        return "\n\tSUB eax, ebx ; subtraindo dois inteiros"
     
     def div(self):
-        return "\n\tDIV ebx, ecx"
+        return "\n\tDIV eax ; dividindo dois inteiros"
     
     def mult(self):
-        return "\n\tMUL ebx, ecx"
+        return "\n\tIMUL eax, ebx ; multiplicando dois inteiros"

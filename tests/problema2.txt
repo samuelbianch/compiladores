@@ -7,42 +7,46 @@ fatorial_p = 1;
 fatorial_x = 1;
 
 se (linhas_total > 1){
-    coluna_atual = 0;
-    fatorial_n = 1;
-    fatorial_p = 1;
-    fatorial_x = 1;
-    enquanto (coluna_atual < x) {
+    enquanto (linha_atual < linhas_total) {
+        coluna_atual = 0;
         fatorial_n = 1;
         fatorial_p = 1;
         fatorial_x = 1;
 
-        n = linha_atual;
-        enquanto (n > 0){
-            fatorial_n = fatorial_n * n;
-            n = n - 1;
-        };
-        
-        p = coluna_atual;
-        enquanto (p > 0) {
-            fatorial_p = fatorial_p * p;
-            p = p - 1;
-        };
-
-        aux = linha_atual - coluna_atual;
-        enquanto (aux > 0) {
-            fatorial_x = fatorial_x * aux;
-            aux = aux - 1;
-        };
-
-        denominador = fatorial_p * fatorial_x;
-        resultado = fatorial_n / denominador;
-        escreva -> resultado;
-
-        coluna_atual = coluna_atual + 1;
-        
-        escreva -> \n;
-        linha_atual = linha_atual + 1;
         x = linha_atual + 1;
+        enquanto (coluna_atual < x) {
+            fatorial_n = 1;
+            fatorial_p = 1;
+            fatorial_x = 1;
+
+            n = linha_atual;
+            enquanto (n > 0){
+                fatorial_n = fatorial_n * n;
+                n = n - 1;
+            };
+            
+            p = coluna_atual;
+            enquanto (p > 0) {
+                fatorial_p = fatorial_p * p;
+                p = p - 1;
+            };
+
+            aux = linha_atual - coluna_atual;
+            enquanto (aux > 0) {
+                fatorial_x = fatorial_x * aux;
+                aux = aux - 1;
+            };
+
+            denominador = fatorial_p * fatorial_x;
+            resultado = fatorial_n / denominador;
+            escreva -> resultado;
+
+            coluna_atual = coluna_atual + 1;
+            
+            escreva -> \n;
+            linha_atual = linha_atual + 1;
+            x = linha_atual + 1;
+        };
     };
 } senao {
     escreva -> "ERRO";

@@ -21,6 +21,10 @@ se (aux1 > c) {
             }; se (b == c) {
         se (b != a) {
             escreva -> "Isoceles";
+        }; se (a == c) {
+            se (a != b) {
+                escreva -> "Isoceles";
+            };
         };
     }; se (a != b) {
         se (a != c) {
