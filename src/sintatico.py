@@ -36,6 +36,7 @@
 34 - 	<COMP> ::= <EXPRESSION> <RELATIONAL_OPERATOR> <EXPRESSION>
 35 - 	<WHILE> ::= while "(" <COMP> ")" "{" <STMT_LIST> "}"
 '''
+import os
 from typing import List
 
 class AnalisadorSintatico:
@@ -243,7 +244,7 @@ class AnalisadorSintatico:
         i = 1
 
         # Cria o arquivo de saída
-        saida = open('D:\Programação\\compiladores\out\saida_sintatico.txt', 'w')
+        saida = open(os.getcwd()+'\out\saida_sintatico.txt', 'w')
         #print("Topo da pilha: " + self.peek())
         while len(self.lista_tokens) > 0:
             saida.write(str(self.pilha_comandos) + "\n")

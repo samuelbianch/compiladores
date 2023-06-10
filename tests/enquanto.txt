@@ -1,6 +1,13 @@
 a = 4;
 i = 0;
+j = 0;
 enquanto (i < a) {
     escreva -> "LOOP";
+    enquanto (j < a) {
+        escreva -> i;
+        escreva -> "\";
+        escreva -> j;
+        j = j + 1;
+    };
     i = i + 1;
 };

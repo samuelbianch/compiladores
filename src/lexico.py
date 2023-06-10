@@ -47,6 +47,8 @@ Tokens 400-499
 
 '''
 
+import os
+
 # Delimitadores da linguagem
 DELIMITADORES = ';(){}'
 MATEMATICA = "+ - / * > < == !=".split()
@@ -119,9 +121,6 @@ class AnalisadorLexico():
                 # print("Palavra reservada encontrada: ", PALAVRA_RESERVADA[position])
                 break
             position += 1
-        
-        print("Sou o numero: ", position)
-
         return str(position)
     
     def is_seta(self, entrada):
@@ -207,7 +206,7 @@ class AnalisadorLexico():
         """Analisador de linha a linha para definir quais digitos/tokens foram encontrados"""
 
         # Cria o arquivo de saída
-        arquivo_saida = open('D:\Programação\compiladores\out\saida_lexico.txt', 'w')
+        arquivo_saida = open(os.getcwd()+'\out\saida_lexico.txt', 'w')
 
         # Lendo a linha da entrada
         linha = arquivo.readline()

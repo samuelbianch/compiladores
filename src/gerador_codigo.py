@@ -1,3 +1,4 @@
+import os
 from intermediario import GeradorIntermediario
 from lexico import AnalisadorLexico
 from typing import List
@@ -5,7 +6,7 @@ from typing import List
 class GeradorCodigo():
     
     def __init__(self, intermediario, lista_expressoes, lista_strings, debug):
-        self.saida = open('D:\Programação\\compiladores\\assembly\saida_assembly.asm', 'w')
+        self.saida = open(os.getcwd()+'\\assembly\saida_assembly.asm', 'w')
         self.intermediario = intermediario
         self.cont_string = -1
         self.contador_labels = -1
@@ -15,9 +16,11 @@ class GeradorCodigo():
         self.labels = ""
         self.posso_escrever = True
         self.lista = []
+        self.label = []
         self.guarda_label_enquanto = 0
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         self.debug = debug
+        self.pilha: List[str] = []
 
         if self.debug:
             print("\n-------Gerando cógido-------")
@@ -25,6 +28,13 @@ class GeradorCodigo():
         with open('D:\Programação\\compiladores\out\saida_lexico.txt', 'r') as arquivo:
             self.lista_lexica = arquivo.readlines()
             arquivo.close()
+
+    def empilha(self, elemento):
+        self.pilha.append(elemento)
+
+    def desempilha(self):
+        if len(self.pilha) > 0:
+            return self.pilha.pop()
 
     def elemento_lista(self):
         if len(self.lista) > 0:
@@ -71,9 +81,16 @@ class GeradorCodigo():
         enquanto = False
         while i < len(self.lista_por_comandos):
             
-            #if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
-            #    if not self.lista:
-             #       self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
+            if self.lista_por_comandos[i][1] == '}' and self.lista_por_comandos[i+1][1] == ';':
+                if len(self.pilha) > 0:
+                    label_ = self.label.pop()
+                    self.saida.write(self.desempilha())
+                    if enquanto:
+                        self.saida.write("\n\tJMP label_" + str(self.contador_labels+2))
+
+                enquanto = False
+
+
 
             if self.lista_por_comandos[i][1] == '}':
                 #self.lista.append("\n\tJMP label_" + str(self.guarda_label_enquanto))
@@ -87,6 +104,7 @@ class GeradorCodigo():
                             self.saida.write("\n\tJMP label_" + str(self.guarda_label_enquanto))
                             enquanto = False
                         #self.saida.write("\n\nlabel_" + str(label+1) + ":")
+
                 
             elif self.lista_por_comandos[i][1] == 'leia':
                 if not len(self.lista) > 0:
@@ -116,7 +134,7 @@ class GeradorCodigo():
                     expressao += " " + self.lista_por_comandos[i][1]
                     i += 1
                 expressao = expressao.strip()
-                if not len(self.lista) > 0:
+                if not len(self.lista) > 0 or not len(self.pilha) > 0:
                     self.saida.write(self.recebe(expressao, variavel))
                 else:
                     self.lista.append(self.recebe(expressao, variavel))
@@ -141,8 +159,10 @@ class GeradorCodigo():
                 self.lista.append("\n\nlabel_" + str(self.cont_labels()) + ":")
 
             elif self.lista_por_comandos[i][1] == 'enquanto':
+                label = self.cont_labels()
+                self.saida.write("\n\nlabel_" + str(self.contador_labels) +":")
                 enquanto = True
-                self.guarda_label_enquanto = label
+                self.label.append(label)
                 i += 2
                 ex1 = ""
                 ex2 = ""
@@ -151,8 +171,8 @@ class GeradorCodigo():
                 op = self.lista_por_comandos[i][1]
                 i += 1
                 ex2 += self.lista_por_comandos[i][1]
-
-                self.lista.append(self.condicao(ex1, op, ex2, label))            
+                self.saida.write(self.condicao(ex1, op, ex2, label) + str(label))
+                self.empilha(self.condicao(ex1, op, ex2, label) + str(label))            
             i += 1
 
             if self.debug:
@@ -223,7 +243,6 @@ class GeradorCodigo():
 
     def recebe(self, expressao, variavel):
         expressao_posfixa = GeradorIntermediario.infixToPostfix(expressao)
-        print("Expressao posfixa", expressao_posfixa.split())
         
         string = ""
         i = 0

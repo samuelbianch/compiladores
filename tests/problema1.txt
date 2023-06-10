@@ -5,37 +5,39 @@ leia -> c;
 aux1 = a + b;
 aux2 = a + c;
 aux3 = b + c;
+resposta = 1;
 
-se (aux1 > c) {
-    se (aux2 > b) {
-        se (aux3 > a) {
-            escreva -> "EhTriangulo";
-            se (a == b) {       
-                se (b == c) {
-                    escreva -> "Equilatero";
-                };
-            }; se (a == b) {
-                se (b != c) {
-                 escreva -> "Isoceles";
-                };
-            }; se (b == c) {
+se (aux1 < c) {
+    resposta = 0;
+}; se (aux2 < b) {
+    resposta = 0;
+}; se (aux3 < a) {
+    resposta = 0;
+};
+
+se (resposta == 0) {
+    escreva -> "NaoEhTriangulo";
+} senao {
+    se (a == b) {
+        se (b == c) {
+            escreva -> "Equilatero";
+        };
+    }; se (a == b) {
+        se (b != c) {
+            escreva -> "Isoceles";
+        };
+    }; se (b == c) {
         se (b != a) {
             escreva -> "Isoceles";
-        }; se (a == c) {
-            se (a != b) {
-                escreva -> "Isoceles";
-            };
         };
-    }; se (a != b) {
-        se (a != c) {
-            escreva -> "Escaleno";
-        };
-        } senao {
-            escreva -> "ERRO";
+    }; se (a == c) {
+        se (c != b) {
+            escreva -> "Isoceles";
         };
     };
+     se (a != b) {
+            se (a != c) {
+                escreva -> "Escaleno";
+            };
+        }; 
 };
-} senao {
-    escreva -> "NaoEhTriangulo";
-};
-

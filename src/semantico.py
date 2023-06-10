@@ -1,3 +1,4 @@
+import os
 
 class AnalisadorSemantico():
 
@@ -21,6 +22,6 @@ class AnalisadorSemantico():
             i += 1
 
     def analisa(self):
-        with open('D:\Programação\\compiladores\out\saida_lexico.txt', 'r') as arquivo:
+        with open(os.getcwd()+'\out\saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.divisao_por_zero(lista)

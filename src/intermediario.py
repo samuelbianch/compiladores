@@ -1,3 +1,4 @@
+import os
 from lexico import AnalisadorLexico
 from typing import List
 
@@ -16,7 +17,7 @@ class GeradorIntermediario():
         self.lista_variaveis = AnalisadorLexico.get_lista_variaveis_to_intermediario()
         self.remove_repetidos()
         self.pilha: List[str] = []
-        with open('D:\Programação\\compiladores\out\saida_lexico.txt', 'r') as arquivo:
+        with open(os.getcwd()+'\out\saida_lexico.txt', 'r') as arquivo:
             lista = arquivo.readlines()
             self.get_lista_expressoes(lista)
             self.lista_string__ = self.get_string(lista)

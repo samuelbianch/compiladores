@@ -4,10 +4,10 @@ Repositório para a disciplina de compiladores de Eng. da Computação 2023/1
 
 # Como usar
 
-Para executar o compilador, entre na pasta .\src
+Para executar o compilador, na pasta raiz você deve digitar o seguinte comando:
 
 `
-python main.py ..\tests\problema2.txt
+python src\main.py tests\problema1.txt
 `
 
 # NASM

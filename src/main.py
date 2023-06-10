@@ -11,8 +11,10 @@ if sys.argv[1]:
         with open(sys.argv[1], "r") as arquivo:
             print("Arquivo lido")
 
-            if sys.argv[2] == '-tudo':
-                DEBUG = True
+            DEBUG = False
+            if len(sys.argv) > 2:
+                if sys.argv[2] == '-tudo':
+                    DEBUG = True
 
             analisador_lexico = AnalisadorLexico(DEBUG)
             analisador_lexico.analisa(arquivo)
