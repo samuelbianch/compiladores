@@ -124,6 +124,7 @@ class GeradorCodigo():
             elif self.lista_por_comandos[i][1] == '{':
                 label = self.cont_labels()
                 self.saida.write("\n\nlabel_" + str(self.contador_labels) +":")
+                posso_terminar = False
 
 
             elif self.lista_por_comandos[i][1] == '=':
@@ -134,7 +135,7 @@ class GeradorCodigo():
                     expressao += " " + self.lista_por_comandos[i][1]
                     i += 1
                 expressao = expressao.strip()
-                if not len(self.lista) > 0 or not len(self.pilha) > 0:
+                if not len(self.lista):
                     self.saida.write(self.recebe(expressao, variavel))
                 else:
                     self.lista.append(self.recebe(expressao, variavel))
